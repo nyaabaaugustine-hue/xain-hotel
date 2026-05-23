@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 Int       @id @default(autoincrement())
+  fullname           String
+  email              String    @unique
+  password           String
+  isAdmin            Int       @default(0) @map("is_admin")
+  userLevel          Int?      @map("user_level")
+  status             Int       @default(1)
+  image              String?
+  lastLogin          DateTime? @map("last_login")
+  lastLogout         DateTime? @map("last_logout")
+  passwordResetToken String?   @map("password_reset_token")
+  createdAt          DateTime  @default(now()) @map("created_at")
+  reservations       Reservation[]
+  @@map("user")
+}
+
+model RoomType {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  price       Decimal  @db.Decimal(10, 2)
+  capacity    Int      @default(1)
+  image       String?
+  status      Int      @default(1)
+  createdAt   DateTime @default(now()) @map("created_at")
+  rooms       Room[]
+  @@map("room_type")
+}
+
+model Room {
+  id           Int          @id @default(autoincrement())
+  roomNo       String       @unique @map("room_no")
+  roomTypeId   Int          @map("room_type_id")
+  floorId      Int?         @map("floor_id")
+  status       String       @default("available")
+  description  String?
+  createdAt    DateTime     @default(now()) @map("created_at")
+  roomType     RoomType     @relation(fields: [roomTypeId], references: [id])
+  reservations Reservation[]
+  @@map("room")
+}
+
+model Customer {
+  id           Int           @id @default(autoincrement())
+  name         String
+  email        String?       @unique
+  phone        String?
+  address      String?
+  idType       String?       @map("id_type")
+  idNumber     String?       @map("id_number")
+  nationality  String?
+  status       Int           @default(1)
+  createdAt    DateTime      @default(now()) @map("created_at")
+  reservations Reservation[]
+  @@map("customer")
+}
+
+model Reservation {
+  id             Int       @id @default(autoincrement())
+  bookingNo      String    @unique @map("booking_no")
+  customerId     Int       @map("customer_id")
+  roomId         Int       @map("room_id")
+  checkIn        DateTime  @map("check_in")
+  checkOut       DateTime  @map("check_out")
+  adults         Int       @default(1)
+  children       Int       @default(0)
+  totalAmount    Decimal   @db.Decimal(10, 2) @map("total_amount")
+  paidAmount     Decimal   @default(0) @db.Decimal(10, 2) @map("paid_amount")
+  status         String    @default("pending")
+  paymentStatus  String    @default("unpaid") @map("payment_status")
+  paymentMethod  String?   @map("payment_method")
+  notes          String?
+  createdBy      Int?      @map("created_by")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  customer       Customer  @relation(fields: [customerId], references: [id])
+  room           Room      @relation(fields: [roomId], references: [id])
+  user           User?     @relation(fields: [createdBy], references: [id])
+  @@map("reservation")
+}
+
+model Employee {
+  id           Int      @id @default(autoincrement())
+  employeeId   String   @unique @map("employee_id")
+  name         String
+  email        String?  @unique
+  phone        String?
+  departmentId Int?     @map("department_id")
+  designationId Int?    @map("designation_id")
+  salary       Decimal? @db.Decimal(10, 2)
+  joinDate     DateTime? @map("join_date")
+  status       Int      @default(1)
+  image        String?
+  createdAt    DateTime @default(now()) @map("created_at")
+  department   Department? @relation(fields: [departmentId], references: [id])
+  @@map("employee")
+}
+
+model Department {
+  id        Int        @id @default(autoincrement())
+  name      String
+  status    Int        @default(1)
+  employees Employee[]
+  @@map("department")
+}
+
+model Order {
+  id          Int         @id @default(autoincrement())
+  orderNo     String      @unique @map("order_no")
+  tableNo     String?     @map("table_no")
+  customerId  Int?        @map("customer_id")
+  totalAmount Decimal     @db.Decimal(10, 2) @map("total_amount")
+  discount    Decimal     @default(0) @db.Decimal(10, 2)
+  tax         Decimal     @default(0) @db.Decimal(10, 2)
+  netAmount   Decimal     @db.Decimal(10, 2) @map("net_amount")
+  status      String      @default("pending")
+  paymentMethod String?   @map("payment_method")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  items       OrderItem[]
+  @@map("orders")
+}
+
+model OrderItem {
+  id        Int     @id @default(autoincrement())
+  orderId   Int     @map("order_id")
+  itemName  String  @map("item_name")
+  quantity  Int
+  price     Decimal @db.Decimal(10, 2)
+  total     Decimal @db.Decimal(10, 2)
+  order     Order   @relation(fields: [orderId], references: [id])
+  @@map("order_item")
+}
+
+model CommonSetting {
+  id              Int     @id @default(autoincrement())
+  hotelName       String? @map("hotel_name")
+  logo            String?
+  address         String?
+  phone           String?
+  email           String?
+  currency        String? @default("USD")
+  currencySymbol  String? @default("$") @map("currency_symbol")
+  timezone        String? @default("UTC")
+  @@map("common_setting")
+}
