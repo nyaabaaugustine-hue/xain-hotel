@@ -10,7 +10,14 @@ api.interceptors.response.use(
   (res) => res,
   async (err) => {
     const original = err.config;
-    if (err.response?.status === 401 && !original._retry) {
+    // Don't retry auth endpoints or already-retried requests
+    if (
+      err.response?.status === 401 &&
+      !original._retry &&
+      !original.url?.includes('/auth/refresh') &&
+      !original.url?.includes('/auth/login') &&
+      !original.url?.includes('/auth/me')
+    ) {
       original._retry = true;
       try {
         await api.post("/api/auth/refresh");

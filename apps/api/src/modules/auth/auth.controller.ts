@@ -28,9 +28,7 @@ export const login = async (req: Request, res: Response) => {
     return sendError(res, "Invalid credentials or account deactivated", 401);
 
   const valid = await bcrypt.compare(password, user.password);
-  // support legacy md5 passwords from CI
-  const legacyMd5 = require("crypto").createHash("md5").update(password).digest("hex");
-  if (!valid && legacyMd5 !== user.password)
+  if (!valid)
     return sendError(res, "Invalid credentials", 401);
 
   const payload = { id: user.id, email: user.email, isAdmin: user.isAdmin, userLevel: user.userLevel };

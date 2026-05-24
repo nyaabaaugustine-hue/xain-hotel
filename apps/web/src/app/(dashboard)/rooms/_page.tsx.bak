@@ -1,0 +1,6 @@
+import { permanentRedirect } from "next/navigation";
+
+// Stub: real page is at /manage-rooms to avoid conflict with (public)/rooms
+export default function RoomsStub() {
+  permanentRedirect("/manage-rooms");
+}
