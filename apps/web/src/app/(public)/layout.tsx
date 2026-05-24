@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X, Phone, Mail, MapPin, ArrowRight } from "lucide-react";
 
@@ -18,6 +19,7 @@ function PublicNav() {
   const links: [string, string][] = [
     ["Home", "/"],
     ["Rooms", "/rooms"],
+    ["Dining", "/#restaurant"],
     ["About", "/about"],
     ["Contact", "/contact"],
   ];
@@ -30,12 +32,12 @@ function PublicNav() {
     }`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-10 py-5 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-9 h-9 bg-gradient-to-br from-gold-400 to-gold-500 rounded flex items-center justify-center shadow-lg shadow-gold-400/20 group-hover:shadow-gold-400/40 transition-shadow">
-            <span className="text-brand-900 font-bold text-sm">S</span>
+          <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-gold-400/20 group-hover:shadow-gold-400/40 transition-shadow border border-white/10 flex-shrink-0">
+            <Image src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1779626649/ht_q5mae2.png" alt="Xain Hotel" width={40} height={40} className="object-contain w-full h-full" />
           </div>
           <div>
-            <span className="text-white font-display text-lg font-semibold tracking-[0.3em]">SMIC360</span>
-            <span className="text-gold-400/60 text-[9px] font-light tracking-[0.4em] block -mt-1 uppercase">Softwares</span>
+            <span className="text-white font-display text-lg font-semibold tracking-[0.3em]">Xain Hotel</span>
+            <span className="text-gold-400/60 text-[9px] font-light tracking-[0.4em] block -mt-1 uppercase">Cantonments · Accra</span>
           </div>
         </Link>
 
@@ -91,12 +93,12 @@ function PublicFooter() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-14">
         <div>
           <div className="flex items-center gap-2.5 mb-5">
-            <div className="w-8 h-8 bg-gradient-to-br from-gold-400 to-gold-500 rounded flex items-center justify-center">
-              <span className="text-brand-900 font-bold text-xs">S</span>
+            <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 flex-shrink-0">
+              <Image src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1779626649/ht_q5mae2.png" alt="Xain Hotel" width={40} height={40} className="object-contain w-full h-full" />
             </div>
             <div>
-              <span className="text-white font-display tracking-[0.3em] text-base font-semibold">SMIC360</span>
-              <span className="text-gold-400/50 text-[9px] tracking-[0.35em] block -mt-1 uppercase">Softwares</span>
+              <span className="text-white font-display tracking-[0.3em] text-base font-semibold">Xain Hotel</span>
+              <span className="text-gold-400/50 text-[9px] tracking-[0.35em] block -mt-1 uppercase">Cantonments · Accra</span>
             </div>
           </div>
           <p className="text-white/25 text-xs leading-relaxed mb-5">

@@ -7,7 +7,7 @@ import Image from "next/image";
 import {
   BedDouble, Wifi, Car, Utensils, Phone, Mail, MapPin,
   Star, ChevronRight, Coffee, Shield, Waves, Menu, X, ArrowRight,
-  ChevronLeft, MapPin as MapIcon, Clock, X as XIcon,
+  ChevronLeft, MapPin as MapIcon, Clock, X as XIcon, Flame, Leaf, Wine, UtensilsCrossed,
 } from "lucide-react";
 import { IMAGES } from "@/lib/images";
 
@@ -392,6 +392,53 @@ function LightboxModal({ src, alt, onClose }: { src: string; alt: string; onClos
   );
 }
 
+// ── Restaurant data ──────────────────────────────────────────────────────
+const SIGNATURE_DISHES = [
+  {
+    icon: Flame,
+    name: "Grilled Tilapia Royale",
+    desc: "Whole tilapia marinated in shito & citrus, grilled over open flame, served with coconut jollof and fried plantain.",
+    tag: "Chef’s Signature",
+    price: "GH₵ 185",
+    color: "from-orange-600 to-red-700",
+    glow: "rgba(234,88,12,0.30)",
+  },
+  {
+    icon: Leaf,
+    name: "Kontomire Garden Bowl",
+    desc: "Locally sourced cocoyam leaves sautéed with smoked fish, palm oil & garden eggs on a bed of fermented corn.",
+    tag: "Plant-Forward",
+    price: "GH₵ 110",
+    color: "from-emerald-600 to-teal-700",
+    glow: "rgba(5,150,105,0.30)",
+  },
+  {
+    icon: UtensilsCrossed,
+    name: "Presidential Fufu & Light Soup",
+    desc: "Premium goat light soup—slow-cooked six hours—with hand-pounded cassava fufu, garnished with herb oil.",
+    tag: "Heritage Classic",
+    price: "GH₵ 140",
+    color: "from-amber-600 to-yellow-700",
+    glow: "rgba(217,119,6,0.30)",
+  },
+  {
+    icon: Wine,
+    name: "Gold Coast Tasting Menu",
+    desc: "An eight-course journey through Ghana’s finest ingredients, paired with West African wines & botanical cocktails.",
+    tag: "Tasting Menu",
+    price: "GH₵ 620 / person",
+    color: "from-purple-700 to-indigo-800",
+    glow: "rgba(124,58,237,0.30)",
+  },
+];
+
+const DINING_STATS: [string, string][] = [
+  ["8", "Course Tasting Menu"],
+  ["100%", "Locally Sourced"],
+  ["#1", "Accra Fine Dining"],
+  ["7am", "Open Daily"],
+];
+
 // ── Main page ──────────────────────────────────────────────────────────────
 export default function RootPage() {
   const { user, loading } = useAuth();
@@ -425,17 +472,17 @@ export default function RootPage() {
       }`}>
         <div className="max-w-7xl mx-auto px-6 lg:px-10 py-5 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 bg-gradient-to-br from-gold-400 to-gold-500 rounded flex items-center justify-center shadow-lg shadow-gold-400/20 group-hover:shadow-gold-400/40 transition-shadow">
-              <span className="text-brand-900 font-bold text-sm tracking-widest">S</span>
+            <div className="w-10 h-10 rounded-xl overflow-hidden shadow-lg shadow-gold-400/20 group-hover:shadow-gold-400/40 transition-shadow border border-white/10 flex-shrink-0">
+              <Image src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1779626649/ht_q5mae2.png" alt="Xain Hotel" width={40} height={40} className="object-contain w-full h-full" />
             </div>
             <div>
-              <span className="text-white font-display text-lg font-semibold tracking-[0.3em]">SMIC360</span>
-              <span className="text-gold-400/60 text-[9px] font-light tracking-[0.4em] block -mt-1 uppercase">Softwares</span>
+              <span className="text-white font-display text-lg font-semibold tracking-[0.3em]">Xain Hotel</span>
+              <span className="text-gold-400/60 text-[9px] font-light tracking-[0.4em] block -mt-1 uppercase">Cantonments · Accra</span>
             </div>
           </Link>
 
           <div className="hidden md:flex items-center gap-8 text-sm">
-            {[["Home","/"],["Rooms","/rooms"],["About","/about"],["Contact","/contact"]].map(([l,h]) => (
+            {[["Home","/"],["Rooms","/rooms"],["Dining","/#restaurant"],["About","/about"],["Contact","/contact"]].map(([l,h]) => (
               <Link key={l} href={h}
                 className="text-white/70 hover:text-gold-400 transition-colors tracking-widest uppercase text-[11px] font-medium relative group">
                 {l}
@@ -606,6 +653,144 @@ export default function RootPage() {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── RESTAURANT ── */}
+      <section id="restaurant" className="relative overflow-hidden" style={{ background: "#0D0500" }}>
+        <style>{`
+          @keyframes shimmer {
+            0%   { background-position: -200% center; }
+            100% { background-position: 200% center; }
+          }
+          .dish-card:hover { transform: translateY(-8px); }
+          .dish-card { transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s ease, border-color 0.4s ease; }
+        `}</style>
+
+        {/* Ambient warm glows */}
+        <div className="absolute top-0 left-0 w-[600px] h-[600px] rounded-full pointer-events-none" style={{ background: "radial-gradient(ellipse, rgba(251,146,60,0.08) 0%, transparent 65%)", transform: "translate(-30%, -30%)" }} />
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none" style={{ background: "radial-gradient(ellipse, rgba(239,68,68,0.07) 0%, transparent 65%)", transform: "translate(30%, 30%)" }} />
+
+        {/* ── Split hero ── */}
+        <div className="relative grid grid-cols-1 lg:grid-cols-2" style={{ minHeight: 640 }}>
+
+          {/* Left — text */}
+          <div className="relative z-10 flex flex-col justify-center px-8 md:px-14 xl:px-20 py-24">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="h-px w-10" style={{ background: "linear-gradient(90deg, transparent, rgba(251,146,60,0.7))" }} />
+              <p className="text-[11px] font-semibold tracking-[0.45em] uppercase" style={{ color: "#F97316" }}>Award-Winning Cuisine</p>
+            </div>
+
+            <h2 className="font-display font-light text-white leading-tight mb-6"
+                style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.8rem,5.5vw,4.5rem)" }}>
+              Gold Coast<br />
+              <span style={{
+                background: "linear-gradient(135deg, #F59E0B 0%, #EF4444 55%, #F97316 100%)",
+                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+                backgroundSize: "200% auto", animation: "shimmer 4s linear infinite",
+              }}>
+                Kitchen
+              </span>
+            </h2>
+
+            <p className="font-light text-[15px] leading-relaxed mb-3 max-w-md" style={{ color: "rgba(255,255,255,0.50)" }}>
+              Where centuries of Ghanaian culinary tradition meet contemporary technique. Our Executive Chef Laurent Asante sources every ingredient from within 50 km of the hotel.
+            </p>
+            <p className="font-light text-sm leading-relaxed mb-10 max-w-md" style={{ color: "rgba(255,255,255,0.28)" }}>
+              From hand-pounded fufu to eight-course tasting menus — every plate tells the story of the Gold Coast.
+            </p>
+
+            {/* Mini stats */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-10">
+              {DINING_STATS.map(([num, label]) => (
+                <div key={label} className="rounded-2xl p-4 text-center" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(251,146,60,0.14)" }}>
+                  <p className="text-2xl font-display font-semibold mb-1" style={{ fontFamily: "var(--font-display)", color: "#F59E0B" }}>{num}</p>
+                  <p className="text-[10px] leading-tight" style={{ color: "rgba(255,255,255,0.30)" }}>{label}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <a href="/contact"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-[11px] font-semibold tracking-widest uppercase transition-all duration-300 hover:scale-[1.03] active:scale-95"
+                style={{ background: "linear-gradient(135deg,#F59E0B,#EF4444)", color: "#fff", boxShadow: "0 8px 32px rgba(245,158,11,0.35)" }}>
+                <Utensils size={14} /> Reserve a Table
+              </a>
+              <div className="inline-flex items-center gap-3 px-6 py-4 rounded-xl text-[11px] tracking-widest uppercase"
+                style={{ border: "1px solid rgba(251,146,60,0.22)", background: "rgba(255,255,255,0.03)", color: "rgba(255,255,255,0.45)" }}>
+                <Clock size={13} style={{ color: "rgba(251,146,60,0.7)" }} />
+                Daily 7:00 AM – 10:30 PM
+              </div>
+            </div>
+          </div>
+
+          {/* Right — image */}
+          <div className="relative min-h-[420px] lg:min-h-0 overflow-hidden">
+            <Image src={CL.amenityDining} alt="Gold Coast Kitchen" fill
+              className="object-cover object-center" sizes="(max-width:1024px) 100vw, 50vw" />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(to right, #0D0500 0%, rgba(13,5,0,0.3) 40%, transparent 100%)" }} />
+            <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(13,5,0,0.85) 0%, transparent 50%)" }} />
+
+            {/* Chef floating card */}
+            <div className="absolute bottom-7 right-7 left-7 lg:left-auto lg:w-80 rounded-2xl p-5"
+              style={{ background: "rgba(13,5,0,0.78)", backdropFilter: "blur(12px)", border: "1px solid rgba(251,146,60,0.22)" }}>
+              <div className="flex items-center gap-4 mb-3">
+                <div className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0"
+                  style={{ background: "linear-gradient(135deg,#F59E0B,#EF4444)" }}>LA</div>
+                <div>
+                  <p className="text-white font-semibold text-sm">Chef Laurent Asante</p>
+                  <p className="text-[11px] tracking-wide" style={{ color: "rgba(251,146,60,0.65)" }}>Executive Chef · Michelin Trained</p>
+                </div>
+              </div>
+              <p className="text-xs leading-relaxed italic" style={{ color: "rgba(255,255,255,0.35)" }}>
+                &ldquo;Every dish I create is a love letter to Ghana — its spices, its soil, its soul.&rdquo;
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Signature Dishes grid ── */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-10 pt-6 pb-16">
+          <div className="text-center mb-12">
+            <p className="text-[11px] font-semibold tracking-[0.4em] uppercase mb-3" style={{ color: "rgba(251,146,60,0.65)" }}>From Our Kitchen</p>
+            <h3 className="font-display font-light text-white" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.8rem,3.5vw,2.8rem)" }}>
+              Signature Dishes
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {SIGNATURE_DISHES.map((dish) => (
+              <div key={dish.name} className="dish-card rounded-2xl p-6"
+                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${dish.color} flex items-center justify-center mb-5 shadow-lg`}>
+                  <dish.icon size={20} className="text-white" />
+                </div>
+                <span className="text-[9px] font-semibold tracking-[0.3em] uppercase px-2.5 py-1 rounded-full mb-4 inline-block"
+                  style={{ background: "rgba(245,158,11,0.12)", color: "#F59E0B", border: "1px solid rgba(245,158,11,0.2)" }}>
+                  {dish.tag}
+                </span>
+                <h4 className="text-white font-semibold text-base mb-3 leading-snug">{dish.name}</h4>
+                <p className="text-xs leading-relaxed mb-5 font-light" style={{ color: "rgba(255,255,255,0.35)" }}>{dish.desc}</p>
+                <div className="pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+                  <p className="font-semibold text-sm tracking-wide" style={{ color: "#F59E0B" }}>{dish.price}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Private dining CTA */}
+          <div className="mt-10 rounded-2xl p-7 flex flex-col md:flex-row items-center justify-between gap-6"
+            style={{ background: "linear-gradient(135deg,rgba(245,158,11,0.07),rgba(239,68,68,0.05))", border: "1px solid rgba(245,158,11,0.14)" }}>
+            <div>
+              <p className="text-white font-semibold text-lg mb-1">Private Dining &amp; Events</p>
+              <p className="text-sm font-light" style={{ color: "rgba(255,255,255,0.35)" }}>Host your celebration in our exclusive private dining room — up to 24 guests, bespoke menu.</p>
+            </div>
+            <a href="/contact"
+              className="flex-shrink-0 px-8 py-3.5 rounded-xl text-[11px] font-semibold tracking-widest uppercase transition-all duration-300 hover:scale-[1.03] whitespace-nowrap"
+              style={{ background: "rgba(245,158,11,0.10)", color: "#F59E0B", border: "1px solid rgba(245,158,11,0.28)" }}>
+              Enquire Now
+            </a>
           </div>
         </div>
       </section>
@@ -824,12 +1009,12 @@ export default function RootPage() {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-14">
           <div>
             <div className="flex items-center gap-2.5 mb-5">
-              <div className="w-8 h-8 bg-gradient-to-br from-gold-400 to-gold-500 rounded flex items-center justify-center">
-                <span className="text-brand-900 font-bold text-xs">S</span>
+              <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10 flex-shrink-0">
+                <Image src="https://res.cloudinary.com/dwsl2ktt2/image/upload/v1779626649/ht_q5mae2.png" alt="Xain Hotel" width={40} height={40} className="object-contain w-full h-full" />
               </div>
               <div>
-                <span className="text-white font-display tracking-[0.3em] text-base font-semibold">SMIC360</span>
-                <span className="text-gold-400/50 text-[9px] tracking-[0.35em] block -mt-1 uppercase">Softwares</span>
+                <span className="text-white font-display tracking-[0.3em] text-base font-semibold">Xain Hotel</span>
+                <span className="text-gold-400/50 text-[9px] tracking-[0.35em] block -mt-1 uppercase">Cantonments · Accra</span>
               </div>
             </div>
             <p className="text-white/25 text-xs leading-relaxed mb-5">
