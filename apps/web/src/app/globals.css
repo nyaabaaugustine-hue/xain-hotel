@@ -10,46 +10,43 @@
 }
 
 * { box-sizing: border-box; }
-
 html { scroll-behavior: smooth; }
 
 body {
   font-family: var(--font-body);
   background: #FAF6EE;
-  color: #1a1a1a;
+  color: #111111;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ── Kente-inspired pattern ── */
+/* ── Kente pattern ── */
 .kente-pattern {
   background-image:
-    repeating-linear-gradient(45deg,  rgba(232,180,51,0.06) 0px, rgba(232,180,51,0.06) 1px, transparent 1px, transparent 16px),
-    repeating-linear-gradient(-45deg, rgba(232,180,51,0.06) 0px, rgba(232,180,51,0.06) 1px, transparent 1px, transparent 16px);
+    repeating-linear-gradient(45deg,  rgba(232,180,51,0.08) 0px, rgba(232,180,51,0.08) 1px, transparent 1px, transparent 16px),
+    repeating-linear-gradient(-45deg, rgba(232,180,51,0.08) 0px, rgba(232,180,51,0.08) 1px, transparent 1px, transparent 16px);
 }
 
-/* ── Adinkra Gye Nyame pattern ── */
+/* ── Adinkra pattern ── */
 .adinkra-pattern {
   background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Ccircle cx='30' cy='30' r='10' stroke='%23E8B433' stroke-opacity='0.06' stroke-width='1.5'/%3E%3Cpath d='M30 10 L50 50 L10 50 Z' stroke='%23E8B433' stroke-opacity='0.04' stroke-width='1'/%3E%3Cpath d='M20 20 L40 20 L30 40 Z' stroke='%23E8B433' stroke-opacity='0.05' stroke-width='1'/%3E%3C/g%3E%3C/svg%3E");
 }
 
-/* ── Kente weave for dark sections ── */
+/* ── Kente weave ── */
 .kente-weave {
   background-image:
     linear-gradient(90deg, rgba(232,180,51,0.07) 1px, transparent 1px),
-    linear-gradient(0deg, rgba(232,180,51,0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(192,96,48,0.04) 2px, transparent 2px),
-    linear-gradient(0deg, rgba(192,96,48,0.04) 2px, transparent 2px);
+    linear-gradient(0deg,  rgba(232,180,51,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(192,96,48,0.04)  2px, transparent 2px),
+    linear-gradient(0deg,  rgba(192,96,48,0.04)  2px, transparent 2px);
   background-size: 30px 30px, 30px 30px, 90px 90px, 90px 90px;
 }
 
 /* ── Animations ── */
-@keyframes fadeUp  { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
-@keyframes fadeIn  { from { opacity:0; } to { opacity:1; } }
-@keyframes shimmer { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-@keyframes float   { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
-@keyframes goldPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(232,180,51,0); } 50% { box-shadow: 0 0 0 8px rgba(232,180,51,0.12); } }
-@keyframes heroProgress { from { width: 0%; } to { width: 100%; } }
+@keyframes fadeUp      { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn      { from { opacity:0; } to { opacity:1; } }
+@keyframes float       { 0%,100% { transform: translateY(0px); } 50% { transform: translateY(-8px); } }
+@keyframes heroProgress{ from { width: 0%; } to { width: 100%; } }
 
 .animate-fade-up { animation: fadeUp 0.8s cubic-bezier(0.22,1,0.36,1) forwards; }
 .animate-fade-in { animation: fadeIn 0.6s ease forwards; }
@@ -62,7 +59,10 @@ body {
 .delay-600 { animation-delay: 0.8s; }
 .opacity-0 { opacity: 0; }
 
-/* ── Gold shimmer button ── */
+/* ══════════════════════════════════════════
+   BUTTONS
+══════════════════════════════════════════ */
+
 .btn-gold {
   display: inline-flex;
   align-items: center;
@@ -71,7 +71,7 @@ body {
   background-size: 250% auto;
   color: #1A0A00;
   font-family: var(--font-body);
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-size: 0.75rem;
@@ -80,174 +80,282 @@ body {
   position: relative;
   overflow: hidden;
 }
-.btn-gold::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
 .btn-gold:hover {
   background-position: right center;
-  box-shadow: 0 8px 32px rgba(232,180,51,0.45), 0 2px 8px rgba(0,0,0,0.2);
+  box-shadow: 0 8px 32px rgba(232,180,51,0.55), 0 2px 8px rgba(0,0,0,0.25);
   transform: translateY(-2px);
 }
-.btn-gold:hover::after { opacity: 1; }
 .btn-gold:active { transform: translateY(0); }
 
-/* ── Ghost gold button ── */
 .btn-outline-gold {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid rgba(232,180,51,0.5);
+  border: 2px solid rgba(232,180,51,0.8);
   color: #E8B433;
   font-family: var(--font-body);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   font-size: 0.75rem;
   border-radius: 6px;
   transition: all 0.3s ease;
-  backdrop-filter: blur(4px);
 }
 .btn-outline-gold:hover {
-  background: rgba(232,180,51,0.12);
+  background: rgba(232,180,51,0.15);
   border-color: #E8B433;
-  box-shadow: 0 0 0 1px rgba(232,180,51,0.3), inset 0 0 20px rgba(232,180,51,0.05);
   transform: translateY(-1px);
 }
 
-/* ── Gold accent line ── */
+/* ══════════════════════════════════════════
+   GOLD LINE
+══════════════════════════════════════════ */
 .gold-line {
   width: 2.5rem;
   height: 2px;
   background: linear-gradient(90deg, transparent, #E8B433, transparent);
   border-radius: 1px;
 }
-.gold-line-long {
-  width: 5rem;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, #E8B433 50%, transparent);
-}
 
-/* ── Luxury card ── */
+/* ══════════════════════════════════════════
+   CARDS
+══════════════════════════════════════════ */
 .luxury-card {
   background: white;
   border-radius: 1.5rem;
-  border: 1px solid rgba(0,0,0,0.06);
-  box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.05);
   transition: box-shadow 0.4s ease, transform 0.4s ease;
   overflow: hidden;
 }
 .luxury-card:hover {
-  box-shadow: 0 20px 60px rgba(0,0,0,0.13), 0 4px 16px rgba(0,0,0,0.08);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.14), 0 4px 16px rgba(0,0,0,0.09);
   transform: translateY(-6px);
 }
 
-/* ── Glass card ── */
 .glass-card {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.18);
   border-radius: 1.25rem;
   backdrop-filter: blur(12px);
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 .glass-card:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(232,180,51,0.25);
+  background: rgba(255,255,255,0.16);
+  border-color: rgba(232,180,51,0.4);
 }
 
-/* ── Section divider ── */
-.section-divider {
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(232,180,51,0.3), transparent);
-}
-
-/* ── Dashboard/form utilities ── */
 .card {
   background: white;
   border-radius: 1rem;
-  border: 1px solid rgba(0,0,0,0.07);
+  border: 1px solid rgba(0,0,0,0.08);
   padding: 1.5rem;
   box-shadow: 0 2px 12px rgba(0,0,0,0.06);
 }
 
-.input {
-  width: 100%;
-  padding: 0.7rem 1rem;
-  border-radius: 0.75rem;
-  border: 1.5px solid rgba(0,0,0,0.1);
-  background: white;
-  font-size: 0.9rem;
-  font-family: var(--font-body);
-  transition: border-color 0.2s, box-shadow 0.2s;
-  outline: none;
-  color: #1a1a1a;
-}
-.input:focus {
-  border-color: #C49100;
-  box-shadow: 0 0 0 3px rgba(196,145,0,0.12);
-}
-.input::placeholder { color: #aaa; }
+/* ══════════════════════════════════════════
+   FORMS — HIGH VISIBILITY
+══════════════════════════════════════════ */
 
+/* Label — dark, readable */
 .label {
   display: block;
-  font-size: 0.73rem;
-  font-weight: 600;
-  color: #666;
-  margin-bottom: 0.4rem;
-  letter-spacing: 0.08em;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.45rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
+/* Input — strong border, dark text */
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 2px solid #c8b89a;
+  background: #ffffff;
+  font-size: 0.95rem;
+  font-family: var(--font-body);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+  color: #111111;
+  font-weight: 500;
+}
+.input:focus {
+  border-color: #B8860B;
+  box-shadow: 0 0 0 4px rgba(184,134,11,0.15);
+}
+.input::placeholder {
+  color: #6b6b6b;
+  font-weight: 400;
+}
+
+/* Select inherits input styles */
+select.input {
+  cursor: pointer;
+  appearance: auto;
+}
+
+/* Textarea inherits input styles */
+textarea.input {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* ══════════════════════════════════════════
+   BUTTONS — FORM ACTIONS
+══════════════════════════════════════════ */
 .btn-primary {
   background: #0F7048;
-  color: white;
-  padding: 0.625rem 1.25rem;
-  border-radius: 6px;
-  font-weight: 500;
-  font-size: 0.875rem;
+  color: #ffffff;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
   transition: all 0.2s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border: none;
+  cursor: pointer;
 }
-.btn-primary:hover { background: #0A5034; }
+.btn-primary:hover { background: #0A5034; box-shadow: 0 4px 16px rgba(15,112,72,0.35); }
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .btn-secondary {
-  background: white;
+  background: #ffffff;
   color: #0F7048;
-  border: 1.5px solid #0F7048;
-  padding: 0.625rem 1.25rem;
-  border-radius: 6px;
-  font-weight: 500;
-  font-size: 0.875rem;
+  border: 2px solid #0F7048;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
   transition: all 0.2s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 .btn-secondary:hover { background: #EDF7F1; }
 
 .btn-danger {
-  background: #ef4444;
-  color: white;
-  padding: 0.625rem 1.25rem;
-  border-radius: 6px;
-  font-weight: 500;
-  font-size: 0.875rem;
+  background: #dc2626;
+  color: #ffffff;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
   transition: all 0.2s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border: none;
+  cursor: pointer;
 }
-.btn-danger:hover { background: #dc2626; }
+.btn-danger:hover { background: #b91c1c; }
 
-.badge-pending   { display:inline-flex; align-items:center; padding:0.125rem 0.625rem; border-radius:9999px; font-size:0.75rem; font-weight:500; background:#fef3c7; color:#92400e; }
-.badge-checkedin { display:inline-flex; align-items:center; padding:0.125rem 0.625rem; border-radius:9999px; font-size:0.75rem; font-weight:500; background:#dcfce7; color:#15803d; }
-.badge-checkout  { display:inline-flex; align-items:center; padding:0.125rem 0.625rem; border-radius:9999px; font-size:0.75rem; font-weight:500; background:#dbeafe; color:#1d4ed8; }
-.badge-cancelled { display:inline-flex; align-items:center; padding:0.125rem 0.625rem; border-radius:9999px; font-size:0.75rem; font-weight:500; background:#fee2e2; color:#b91c1c; }
+/* ══════════════════════════════════════════
+   BADGES
+══════════════════════════════════════════ */
+.badge-pending   { display:inline-flex; align-items:center; padding:0.2rem 0.75rem; border-radius:9999px; font-size:0.75rem; font-weight:700; background:#fef3c7; color:#78350f; border:1px solid #f59e0b; }
+.badge-checkedin { display:inline-flex; align-items:center; padding:0.2rem 0.75rem; border-radius:9999px; font-size:0.75rem; font-weight:700; background:#dcfce7; color:#14532d; border:1px solid #22c55e; }
+.badge-checkout  { display:inline-flex; align-items:center; padding:0.2rem 0.75rem; border-radius:9999px; font-size:0.75rem; font-weight:700; background:#dbeafe; color:#1e3a8a; border:1px solid #3b82f6; }
+.badge-cancelled { display:inline-flex; align-items:center; padding:0.2rem 0.75rem; border-radius:9999px; font-size:0.75rem; font-weight:700; background:#fee2e2; color:#7f1d1d; border:1px solid #ef4444; }
+
+/* ══════════════════════════════════════════
+   GLOBAL TEXT VISIBILITY OVERRIDES
+   Force faint Tailwind opacity classes to
+   be readable everywhere
+══════════════════════════════════════════ */
+
+/* Body copy on dark backgrounds — was /40 /35 /45 */
+.text-white\/40, .text-white\/35, .text-white\/45 { color: rgba(255,255,255,0.82) !important; }
+
+/* Sub-labels on dark backgrounds — was /30 /25 /20 */
+.text-white\/30, .text-white\/25, .text-white\/20 { color: rgba(255,255,255,0.70) !important; }
+
+/* Very faint text — was /15 /10 */
+.text-white\/15, .text-white\/10 { color: rgba(255,255,255,0.55) !important; }
+
+/* Gray body copy — was text-gray-400 */
+.text-gray-400 { color: #4b4b4b !important; }
+
+/* Lighter gray — was text-gray-300 */
+.text-gray-300 { color: #5a5a5a !important; }
+
+/* Muted gray — was text-gray-500 */
+.text-gray-500 { color: #383838 !important; }
+
+/* Gold opacity — was /70 /60 /50 */
+.text-gold-400\/70, .text-gold-400\/60 { color: rgba(232,180,51,0.95) !important; }
+.text-gold-400\/50 { color: rgba(232,180,51,0.85) !important; }
+
+/* White opacity on nav/footer links — was /25 /20 */
+.text-white\/25, .text-white\/20 { color: rgba(255,255,255,0.65) !important; }
+
+/* ══════════════════════════════════════════
+   BOOKING FORM SPECIFIC — HIGH CONTRAST
+══════════════════════════════════════════ */
+
+/* Step indicator text */
+.step-label { color: #111111; font-weight: 600; }
+
+/* Summary sidebar text */
+.booking-summary-label { color: #333333; font-weight: 500; }
+.booking-summary-value { color: #111111; font-weight: 700; }
+
+/* Room selection cards */
+.room-select-card {
+  border: 2px solid #d4c4a8;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: #fff;
+}
+.room-select-card:hover { border-color: #B8860B; background: #fffbf0; }
+.room-select-card.selected { border-color: #B8860B; background: #fffbf0; box-shadow: 0 0 0 3px rgba(184,134,11,0.2); }
+
+/* Booking confirmation box */
+.booking-confirm-box {
+  background: #fffdf5;
+  border: 2px solid #d4c4a8;
+  border-radius: 1rem;
+  padding: 1.25rem;
+}
+.booking-confirm-row { display:flex; justify-content:space-between; font-size:0.9rem; margin-bottom:0.5rem; }
+.booking-confirm-label { color: #444444; font-weight: 500; }
+.booking-confirm-value { color: #111111; font-weight: 700; }
+
+/* Payment method buttons */
+.payment-btn {
+  padding: 0.75rem;
+  border: 2px solid #c8b89a;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #222222;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.payment-btn:hover { border-color: #B8860B; background: #fffbf0; }
+.payment-btn.selected { border-color: #B8860B; background: #fffbf0; color: #1A0A00; box-shadow: 0 0 0 3px rgba(184,134,11,0.2); }
+
+/* ══════════════════════════════════════════
+   SECTION BACKGROUNDS
+══════════════════════════════════════════ */
+
+/* Cream — light sections */
+.bg-cream       { background-color: #FAF6EE; }
+.bg-cream-dark  { background-color: #F0E8D8; }
+
+/* ══════════════════════════════════════════
+   SECTION DIVIDER
+══════════════════════════════════════════ */
+.section-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,180,51,0.4), transparent);
+}
