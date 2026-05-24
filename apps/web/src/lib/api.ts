@@ -1,7 +1,17 @@
 import axios from "axios";
 
+// CRITICAL: On Vercel production the frontend uses rewrites (/api/* → backend).
+// Cookies only work when requests are same-domain, so we must use relative URLs
+// in production (empty baseURL). localhost dev hits the API directly on port 4000.
+const isLocalDev =
+  typeof window !== "undefined" && window.location.hostname === "localhost";
+
+const baseURL = isLocalDev
+  ? (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000")
+  : ""; // relative — Vercel rewrites proxy /api/* to the backend
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000",
+  baseURL,
   withCredentials: true,
   headers: { "Content-Type": "application/json" },
 });
