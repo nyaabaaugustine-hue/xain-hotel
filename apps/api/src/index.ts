@@ -46,10 +46,12 @@ app.use((_req, res) => res.status(404).json({ success: false, message: "Route no
 // Error handler
 app.use(errorHandler);
 
-app.listen(config.port, () => {
-  console.log(`\n🏨  Xain-Hotel API running on http://localhost:${config.port}`);
-  console.log(`   Environment: ${config.nodeEnv}`);
-  console.log(`   Frontend:    ${config.frontendUrl}\n`);
-});
+if (!process.env.VERCEL) {
+  app.listen(config.port, () => {
+    console.log(`\n🏨  Xain-Hotel API running on http://localhost:${config.port}`);
+    console.log(`   Environment: ${config.nodeEnv}`);
+    console.log(`   Frontend:    ${config.frontendUrl}\n`);
+  });
+}
 
 export default app;
