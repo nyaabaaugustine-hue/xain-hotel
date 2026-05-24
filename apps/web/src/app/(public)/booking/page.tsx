@@ -2,6 +2,7 @@
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import NextImage from "next/image";
 import {
   CheckCircle, BedDouble, User, Calendar, CreditCard,
   ChevronRight, Loader2, ArrowRight, ArrowLeft,
@@ -424,7 +425,7 @@ function BookingForm() {
             <div className={`h-40 relative overflow-hidden ${!selectedRoom ? "bg-gradient-to-br from-brand-900 to-brand-700" : ""}`}>
               {selectedRoom ? (
                 <>
-                  <Image
+                  <NextImage
                     src={IMAGES.g2}
                     alt="Room preview"
                     fill
@@ -491,7 +492,7 @@ export default function BookingPage() {
   return (
     <>
       <section className="relative pt-36 pb-20 px-6 bg-brand-900 overflow-hidden text-center">
-        <Image
+        <NextImage
           src={IMAGES.resort}
           alt="Tropical hotel resort background"
           fill
@@ -515,7 +516,7 @@ export default function BookingPage() {
       </section>
 
       <div className="relative bg-cream min-h-screen py-4 overflow-hidden">
-        <Image
+        <NextImage
           src={IMAGES.beach}
           alt="Relaxing hammocks background"
           fill
