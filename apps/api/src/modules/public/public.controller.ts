@@ -30,7 +30,7 @@ export const availableRooms = async (req: Request, res: Response) => {
     },
     select: { roomId: true },
   });
-  const bookedIds = booked.map((b) => b.roomId);
+  const bookedIds = booked.map((b: { roomId: number }) => b.roomId);
 
   const rooms = await prisma.room.findMany({
     where: { status: "available", id: { notIn: bookedIds } },

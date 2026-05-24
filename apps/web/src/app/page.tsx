@@ -7,7 +7,7 @@ import Image from "next/image";
 import {
   BedDouble, Wifi, Car, Utensils, Phone, Mail, MapPin,
   Star, ChevronRight, Coffee, Shield, Waves, Menu, X, ArrowRight,
-  ChevronLeft, Calendar, MapPin as MapIcon, Clock, X as XIcon,
+  ChevronLeft, MapPin as MapIcon, Clock, X as XIcon,
 } from "lucide-react";
 import { IMAGES } from "@/lib/images";
 

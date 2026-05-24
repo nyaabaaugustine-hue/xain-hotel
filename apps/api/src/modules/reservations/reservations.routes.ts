@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authenticate } from "../../middleware/auth";
 import * as ctrl from "./reservations.controller";
 
-const router = Router();
+const router: Router = Router() as Router;
 router.use(authenticate);
 
 router.get("/", ctrl.getReservations);

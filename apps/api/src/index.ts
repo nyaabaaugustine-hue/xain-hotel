@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Application } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
@@ -16,7 +16,7 @@ import customersRoutes from "./modules/customers/customers.routes";
 import dashboardRoutes from "./modules/dashboard/dashboard.routes";
 import publicRoutes from "./modules/public/public.routes";
 
-const app = express();
+const app: Application = express() as Application;
 
 app.use(helmet());
 app.use(cors({ origin: config.frontendUrl, credentials: true }));
@@ -38,7 +38,7 @@ app.use("/api/rooms", roomsRoutes);
 app.use("/api/reservations", reservationsRoutes);
 app.use("/api/customers", customersRoutes);
 app.use("/api/dashboard", dashboardRoutes);
-app.use("/api/public", publicRoutes);   // ← open routes for the public website
+app.use("/api/public", publicRoutes);
 
 // 404
 app.use((_req, res) => res.status(404).json({ success: false, message: "Route not found" }));

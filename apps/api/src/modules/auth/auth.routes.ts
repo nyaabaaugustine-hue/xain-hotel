@@ -2,7 +2,7 @@ import { Router } from "express";
 import { login, logout, refreshToken, forgotPassword, resetPassword, me } from "./auth.controller";
 import { authenticate } from "../../middleware/auth";
 
-const router = Router();
+const router: Router = Router() as Router;
 
 router.post("/login", login);
 router.post("/logout", logout);

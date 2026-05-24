@@ -1,7 +1,7 @@
 import { Router } from "express";
 import * as ctrl from "./public.controller";
 
-const router = Router();
+const router: Router = Router() as Router;
 
 // No authenticate middleware — these are open public endpoints
 router.get("/rooms", ctrl.listRooms);
