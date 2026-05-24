@@ -1,9 +1,11 @@
 "use client";
 import { useAuth } from "@/lib/auth-context";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import api from "@/lib/api";
 import { fmt } from "@/lib/utils";
 import { BedDouble, CalendarCheck, Users, TrendingUp, Clock, CheckCircle } from "lucide-react";
+import { IMAGES } from "@/lib/images";
 
 function StatCard({ label, value, icon: Icon, color }: { label: string; value: string | number; icon: any; color: string }) {
   return (
@@ -46,7 +48,10 @@ export default function DashboardPage() {
           <a href="/reservations" className="text-brand-600 text-sm hover:underline">View all</a>
         </div>
         {recent.length === 0 ? (
-          <p className="text-gray-400 text-sm text-center py-8">No reservations yet.</p>
+          <div className="relative py-8 overflow-hidden rounded-2xl">
+            <Image src={IMAGES.g1} alt="" fill className="object-cover object-center opacity-5 pointer-events-none" sizes="400px" />
+            <p className="text-gray-400 text-sm text-center py-8 relative">No reservations yet.</p>
+          </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">

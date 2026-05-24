@@ -1,8 +1,10 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import api from "@/lib/api";
 import { fmt } from "@/lib/utils";
 import { CalendarCheck, Plus } from "lucide-react";
+import { IMAGES } from "@/lib/images";
 
 export default function ReservationsPage() {
   const { data, isLoading } = useQuery({ queryKey: ["reservations"], queryFn: () => api.get("/api/reservations").then(r => r.data.data) });
@@ -22,9 +24,12 @@ export default function ReservationsPage() {
         {isLoading ? (
           <div className="flex justify-center py-16"><div className="w-8 h-8 border-4 border-brand-600 border-t-transparent rounded-full animate-spin" /></div>
         ) : reservations.length === 0 ? (
-          <div className="text-center py-16">
-            <CalendarCheck className="mx-auto text-gray-300 mb-3" size={40} />
-            <p className="text-gray-500">No reservations yet.</p>
+          <div className="text-center py-16 relative overflow-hidden">
+            <Image src={IMAGES.resort} alt="" fill className="object-cover object-center opacity-5 pointer-events-none" sizes="400px" />
+            <div className="relative">
+              <CalendarCheck className="mx-auto text-gray-300 mb-3" size={40} />
+              <p className="text-gray-500">No reservations yet.</p>
+            </div>
           </div>
         ) : (
           <div className="overflow-x-auto">

@@ -141,10 +141,13 @@ export default function RoomsPage() {
               ))}
             </div>
           ) : filtered.length === 0 ? (
-            <div className="text-center py-32">
-              <BedDouble size={48} className="text-gray-200 mx-auto mb-5" />
-              <p className="text-gray-400 text-lg font-light">No rooms found</p>
-              <p className="text-gray-300 text-sm mt-2">Try adjusting your filters</p>
+            <div className="text-center py-32 relative overflow-hidden rounded-3xl">
+              <Image src={IMAGES.g2} alt="" fill className="object-cover object-center opacity-5 pointer-events-none" sizes="100vw" />
+              <div className="relative">
+                <BedDouble size={48} className="text-gray-200 mx-auto mb-5" />
+                <p className="text-gray-400 text-lg font-light">No rooms found</p>
+                <p className="text-gray-300 text-sm mt-2">Try adjusting your filters</p>
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">

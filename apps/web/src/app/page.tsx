@@ -7,7 +7,7 @@ import Image from "next/image";
 import {
   BedDouble, Wifi, Car, Utensils, Phone, Mail, MapPin,
   Star, ChevronRight, Coffee, Shield, Waves, Menu, X, ArrowRight,
-  ChevronLeft,
+  ChevronLeft, Calendar, MapPin as MapIcon, Clock, X as XIcon,
 } from "lucide-react";
 import { IMAGES } from "@/lib/images";
 
@@ -105,6 +105,27 @@ const TESTIMONIALS = [
   { name: "Ama Asante",       flag: "🇬🇭", city: "Accra",  text: "Xain is in a class of its own. The Kente Suite is breathtaking — every detail speaks of heritage and luxury.", rating: 5 },
   { name: "James Holloway",   flag: "🇬🇧", city: "London", text: "I have stayed at five-star hotels across four continents. Xain rivals them all — the service is extraordinary.", rating: 5 },
   { name: "Fatima Al-Rashid", flag: "🇦🇪", city: "Dubai",  text: "An oasis of calm and elegance. The Presidential Suite is the finest I have experienced on the entire continent.", rating: 5 },
+];
+
+const EVENTS = [
+  { date: "JUN 15", title: "Gold Coast Jazz Night",     desc: "An evening of live jazz under the stars with Ghana's finest musicians.",               time: "7:00 PM", location: "Rooftop Lounge" },
+  { date: "JUN 22", title: "Farm-to-Table Dinner",       desc: "Exclusive six-course tasting menu curated by Executive Chef Claire Fontaine.",          time: "6:30 PM", location: "Gold Coast Restaurant" },
+  { date: "JUL 04", title: "Sunset Yoga Session",        desc: "Morning vinyasa flow overlooking the Accra skyline.",                                   time: "6:00 AM", location: "Infinity Pool Deck" },
+  { date: "JUL 12", title: "Kente Weaving Workshop",     desc: "Learn the art of kente weaving from master artisans in an intimate session.",           time: "10:00 AM", location: "Cultural Hall" },
+  { date: "JUL 20", title: "Cocktail Masterclass",       desc: "Mix and shake signature cocktails with our head mixologist.",                          time: "4:00 PM",  location: "Lobby Lounge" },
+  { date: "AUG 01", title: "Wine & Cheese Pairing",      desc: "A curated journey through West African wines paired with artisanal cheeses.",          time: "7:30 PM",  location: "Private Dining Room" },
+];
+
+const GALLERY_IMAGES = [
+  { src: IMAGES.pool,   alt: "Rooftop infinity pool at sunset" },
+  { src: IMAGES.resort, alt: "Tropical resort aerial view" },
+  { src: CL.roomKente,  alt: "Kente Suite interior" },
+  { src: IMAGES.beach,  alt: "Beachside hammocks and umbrellas" },
+  { src: CL.lobby,      alt: "Hotel lobby lounge" },
+  { src: IMAGES.desk,   alt: "Front desk concierge team" },
+  { src: CL.aerial,     alt: "Accra coastline aerial" },
+  { src: IMAGES.g1,     alt: "Hotel gallery" },
+  { src: IMAGES.g2,     alt: "Hotel ambiance" },
 ];
 
 // ── Hero Slider component ──────────────────────────────────────────────────
@@ -347,12 +368,37 @@ function HeroSlider() {
   );
 }
 
+// ── Lightbox Modal ──────────────────────────────────────────────────────────
+function LightboxModal({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handleKey);
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", handleKey); document.body.style.overflow = ""; };
+  }, [onClose]);
+
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-sm p-4"
+      onClick={onClose}
+    >
+      <button onClick={onClose} className="absolute top-6 right-6 text-white/60 hover:text-white transition-colors z-10">
+        <XIcon size={28} />
+      </button>
+      <div className="relative w-full max-w-5xl max-h-[90vh] rounded-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+        <Image src={src} alt={alt} width={1920} height={1080} className="w-full h-full object-contain" sizes="100vw" />
+      </div>
+    </div>
+  );
+}
+
 // ── Main page ──────────────────────────────────────────────────────────────
 export default function RootPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
   const [scrolled, setScrolled]     = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [lightbox, setLightbox]     = useState<string | null>(null);
 
   useEffect(() => { if (!loading && user) router.replace("/dashboard"); }, [user, loading, router]);
 
@@ -607,21 +653,77 @@ export default function RootPage() {
         </div>
       </section>
 
-      {/* ── PHOTO GALLERY STRIP ── */}
-      <section className="py-6 px-6 bg-white">
+      {/* ── EVENTS ── */}
+      <section className="py-28 px-6 bg-white overflow-hidden">
+        <style>{`
+          @keyframes float-slow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+          }
+          .event-card { animation: float-slow 6s ease-in-out infinite; }
+          .event-card:nth-child(2) { animation-delay: 0.5s; }
+          .event-card:nth-child(3) { animation-delay: 1s; }
+          .event-card:nth-child(4) { animation-delay: 1.5s; }
+          .event-card:nth-child(5) { animation-delay: 2s; }
+          .event-card:nth-child(6) { animation-delay: 2.5s; }
+        `}</style>
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 h-52">
-            {[
-              { src: IMAGES.beach, alt: "Beachside relaxation" },
-              { src: IMAGES.pool,  alt: "Rooftop sunset pool" },
-              { src: IMAGES.desk,  alt: "Front desk service" },
-              { src: IMAGES.g2,    alt: "Hotel ambiance" },
-            ].map(({ src, alt }) => (
-              <div key={alt} className="relative rounded-2xl overflow-hidden group">
-                <Image src={src} alt={alt} fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  sizes="(max-width: 768px) 50vw, 25vw" />
-                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+          <div className="text-center mb-20">
+            <div className="gold-line mx-auto mb-6" />
+            <p className="text-gold-500 text-[11px] font-semibold tracking-[0.4em] uppercase mb-4">What's On</p>
+            <h2 className="font-display font-light text-brand-900"
+                style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.2rem,4.5vw,3.5rem)" }}>
+              Upcoming Events
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {EVENTS.map((ev) => (
+              <div key={ev.title} className="event-card bg-white border border-gray-200 rounded-2xl p-7 hover:border-gold-300 hover:shadow-lg transition-all duration-300">
+                <div className="flex items-center gap-4 mb-5">
+                  <div className="w-14 h-14 bg-brand-900 rounded-xl flex flex-col items-center justify-center text-white flex-shrink-0">
+                    <span className="text-[10px] font-semibold tracking-wider leading-none">{ev.date.split(" ")[0]}</span>
+                    <span className="text-lg font-display font-bold leading-none mt-0.5" style={{ fontFamily: "var(--font-display)" }}>{ev.date.split(" ")[1]}</span>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-brand-900 text-base">{ev.title}</h3>
+                    <div className="flex items-center gap-3 mt-1 text-[11px] text-gray-400">
+                      <span className="flex items-center gap-1"><Clock size={11} />{ev.time}</span>
+                      <span className="flex items-center gap-1"><MapIcon size={11} />{ev.location}</span>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-400 text-sm leading-relaxed font-light">{ev.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── GALLERY ── */}
+      <section className="py-28 px-6 bg-cream">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <div className="gold-line mx-auto mb-6" />
+            <p className="text-gold-500 text-[11px] font-semibold tracking-[0.4em] uppercase mb-4">Moments Captured</p>
+            <h2 className="font-display font-light text-brand-900"
+                style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.2rem,4.5vw,3.5rem)" }}>
+              Hotel Gallery
+            </h2>
+          </div>
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+            {GALLERY_IMAGES.map((img) => (
+              <div
+                key={img.alt}
+                onClick={() => setLightbox(img.src)}
+                className="break-inside-avoid relative rounded-2xl overflow-hidden cursor-pointer group"
+              >
+                <Image src={img.src} alt={img.alt} width={800} height={img.alt.includes("Rooftop") || img.alt.includes("lobby") ? 600 : 500}
+                  className="w-full object-cover group-hover:scale-[1.03] transition-transform duration-700" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/25 transition-colors duration-300 flex items-center justify-center">
+                  <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                    <svg className="text-white" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
@@ -711,6 +813,11 @@ export default function RootPage() {
           </div>
         </div>
       </section>
+
+      {/* ── LIGHTBOX ── */}
+      {lightbox && (
+        <LightboxModal src={lightbox} alt="Gallery image" onClose={() => setLightbox(null)} />
+      )}
 
       {/* ── FOOTER ── */}
       <footer className="bg-brand-900 text-white/30 py-20 px-6 border-t border-white/5" style={{ background: "#010C05" }}>

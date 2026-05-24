@@ -1,7 +1,9 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import api from "@/lib/api";
 import { BedDouble, Plus } from "lucide-react";
+import { IMAGES } from "@/lib/images";
 
 export default function RoomsPage() {
   const { data, isLoading } = useQuery({ queryKey: ["rooms"], queryFn: () => api.get("/api/rooms").then(r => r.data.data) });
@@ -20,9 +22,12 @@ export default function RoomsPage() {
       {isLoading ? (
         <div className="flex justify-center py-16"><div className="w-8 h-8 border-4 border-brand-600 border-t-transparent rounded-full animate-spin" /></div>
       ) : rooms.length === 0 ? (
-        <div className="card text-center py-16">
-          <BedDouble className="mx-auto text-gray-300 mb-3" size={40} />
-          <p className="text-gray-500">No rooms added yet.</p>
+        <div className="card text-center py-16 relative overflow-hidden">
+          <Image src={IMAGES.pool} alt="" fill className="object-cover object-center opacity-5 pointer-events-none" sizes="400px" />
+          <div className="relative">
+            <BedDouble className="mx-auto text-gray-300 mb-3" size={40} />
+            <p className="text-gray-500">No rooms added yet.</p>
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">

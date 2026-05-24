@@ -1,8 +1,10 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import api from "@/lib/api";
 import { fmt } from "@/lib/utils";
 import { Users, Plus } from "lucide-react";
+import { IMAGES } from "@/lib/images";
 
 export default function CustomersPage() {
   const { data, isLoading } = useQuery({ queryKey: ["customers"], queryFn: () => api.get("/api/customers").then(r => r.data.data) });
@@ -22,9 +24,12 @@ export default function CustomersPage() {
         {isLoading ? (
           <div className="flex justify-center py-16"><div className="w-8 h-8 border-4 border-brand-600 border-t-transparent rounded-full animate-spin" /></div>
         ) : customers.length === 0 ? (
-          <div className="text-center py-16">
-            <Users className="mx-auto text-gray-300 mb-3" size={40} />
-            <p className="text-gray-500">No customers yet.</p>
+          <div className="text-center py-16 relative overflow-hidden">
+            <Image src={IMAGES.desk} alt="" fill className="object-cover object-center opacity-5 pointer-events-none" sizes="400px" />
+            <div className="relative">
+              <Users className="mx-auto text-gray-300 mb-3" size={40} />
+              <p className="text-gray-500">No customers yet.</p>
+            </div>
           </div>
         ) : (
           <div className="overflow-x-auto">
