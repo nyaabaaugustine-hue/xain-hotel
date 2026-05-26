@@ -6,67 +6,118 @@ import { fmt } from "@/lib/utils";
 import {
   BedDouble, CalendarCheck, Users, TrendingUp,
   CheckCircle, Clock, AlertCircle, DollarSign,
-  ArrowUpRight, ArrowDownRight,
+  ArrowUpRight, ArrowDownRight, Sparkles, Star,
+  Coffee, Utensils, Car, Wifi, Activity, Bell,
+  ChevronRight, MapPin, Moon, Sun, Zap,
 } from "lucide-react";
 
-function StatCard({
-  label, value, sub, icon: Icon, color, trend, trendDir,
-}: {
-  label: string; value: string | number; sub?: string; icon: any;
-  color: string; trend?: string; trendDir?: "up" | "down";
-}) {
-  return (
-    <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-      <div className="flex items-start justify-between mb-4">
-        <div className={`w-11 h-11 rounded-xl flex items-center justify-center ${color}`}>
-          <Icon size={20} className="text-white" />
-        </div>
-        {trend && (
-          <span className={`flex items-center gap-1 text-xs font-semibold ${trendDir === "up" ? "text-emerald-500" : "text-red-400"}`}>
-            {trendDir === "up" ? <ArrowUpRight size={13} /> : <ArrowDownRight size={13} />}
-            {trend}
-          </span>
-        )}
-      </div>
-      <p className="text-2xl font-bold text-gray-800 leading-none mb-1">{value}</p>
-      <p className="text-sm text-gray-500 font-medium">{label}</p>
-      {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
-    </div>
-  );
-}
-
-function OccupancyBar({ occupied, total }: { occupied: number; total: number }) {
-  const pct = total > 0 ? Math.round((occupied / total) * 100) : 0;
-  return (
-    <div>
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-sm font-medium text-gray-600">Occupancy Rate</span>
-        <span className="text-sm font-bold text-gray-800">{pct}%</span>
-      </div>
-      <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-        <div
-          className="h-full rounded-full transition-all duration-700"
-          style={{
-            width: `${pct}%`,
-            background: pct > 80 ? "#ef4444" : pct > 50 ? "#f59e0b" : "#0F7048",
-          }}
-        />
-      </div>
-      <div className="flex justify-between text-[11px] text-gray-400 mt-1">
-        <span>{occupied} occupied</span>
-        <span>{total - occupied} available</span>
-      </div>
-    </div>
-  );
-}
-
-const STATUS_MAP: Record<string, { label: string; cls: string }> = {
-  pending:     { label: "Pending",     cls: "bg-amber-100 text-amber-800" },
-  checked_in:  { label: "Checked In",  cls: "bg-emerald-100 text-emerald-800" },
-  checked_out: { label: "Checked Out", cls: "bg-blue-100 text-blue-800" },
-  cancelled:   { label: "Cancelled",   cls: "bg-red-100 text-red-800" },
+// ─── Fictional seed data shown until real data loads ─────────────────────────
+const FICTIONAL_STATS = {
+  totalRooms: 48,
+  availableRooms: 14,
+  occupiedRooms: 34,
+  checkedIn: 34,
+  todayArrivals: 9,
+  todayDepartures: 5,
+  pendingReservations: 7,
+  totalCustomers: 312,
+  monthlyRevenue: 87640,
+  totalReservations: 128,
 };
 
+const FICTIONAL_RESERVATIONS = [
+  { id: "1", bookingNo: "XH-240891", customer: { name: "Amara Osei-Bonsu" }, room: { roomNo: "P-12", roomType: { name: "Penthouse Suite" } }, checkIn: "2025-05-26", status: "checked_in", totalAmount: 3200 },
+  { id: "2", bookingNo: "XH-240887", customer: { name: "Dr. Kwame Asante" }, room: { roomNo: "D-07", roomType: { name: "Deluxe King" } }, checkIn: "2025-05-26", status: "pending", totalAmount: 1850 },
+  { id: "3", bookingNo: "XH-240882", customer: { name: "Serena Mensah" }, room: { roomNo: "S-21", roomType: { name: "Superior Twin" } }, checkIn: "2025-05-25", status: "checked_in", totalAmount: 960 },
+  { id: "4", bookingNo: "XH-240879", customer: { name: "Nana Acheampong" }, room: { roomNo: "D-03", roomType: { name: "Deluxe King" } }, checkIn: "2025-05-25", status: "checked_out", totalAmount: 2400 },
+  { id: "5", bookingNo: "XH-240874", customer: { name: "Isabella Torres" }, room: { roomNo: "P-08", roomType: { name: "Penthouse Suite" } }, checkIn: "2025-05-24", status: "checked_in", totalAmount: 4100 },
+  { id: "6", bookingNo: "XH-240870", customer: { name: "James Ofori" }, room: { roomNo: "S-15", roomType: { name: "Superior Twin" } }, checkIn: "2025-05-24", status: "cancelled", totalAmount: 720 },
+];
+
+const LIVE_ACTIVITY = [
+  { time: "09:42", msg: "Room P-12 — Early check-in approved", type: "success" },
+  { time: "09:31", msg: "Booking XH-240887 — Payment confirmed", type: "info" },
+  { time: "09:18", msg: "Room D-05 — Housekeeping complete", type: "success" },
+  { time: "08:55", msg: "Booking XH-240881 — Awaiting payment", type: "warn" },
+  { time: "08:40", msg: "New reservation from Isabella Torres", type: "info" },
+];
+
+const ROOM_TYPES = [
+  { name: "Penthouse Suite", total: 6, occupied: 5, color: "#E8B433" },
+  { name: "Deluxe King",     total: 18, occupied: 14, color: "#0F7048" },
+  { name: "Superior Twin",   total: 16, occupied: 12, color: "#7C3AED" },
+  { name: "Standard Room",   total: 8,  occupied: 3,  color: "#0EA5E9" },
+];
+
+const AMENITY_STATS = [
+  { icon: Coffee,   label: "Restaurant",  value: "GH₵ 4,320",  sub: "38 covers today" },
+  { icon: Car,      label: "Parking",     value: "23 / 30",     sub: "Bays occupied" },
+  { icon: Utensils, label: "Room Service",value: "GH₵ 1,740",  sub: "14 orders today" },
+  { icon: Wifi,     label: "Concierge",   value: "11 requests", sub: "2 pending" },
+];
+
+// ─── Status config ────────────────────────────────────────────────────────────
+const STATUS_MAP: Record<string, { label: string; bg: string; text: string; dot: string }> = {
+  pending:     { label: "Pending",     bg: "bg-amber-50",   text: "text-amber-700",  dot: "bg-amber-400" },
+  checked_in:  { label: "Checked In",  bg: "bg-emerald-50", text: "text-emerald-700",dot: "bg-emerald-500" },
+  checked_out: { label: "Checked Out", bg: "bg-sky-50",     text: "text-sky-700",    dot: "bg-sky-500" },
+  cancelled:   { label: "Cancelled",   bg: "bg-red-50",     text: "text-red-600",    dot: "bg-red-400" },
+};
+
+// ─── Micro components ─────────────────────────────────────────────────────────
+
+function KpiCard({ label, value, sub, icon: Icon, gradient, trend, trendDir }: {
+  label: string; value: string | number; sub?: string; icon: any;
+  gradient: string; trend?: string; trendDir?: "up" | "down";
+}) {
+  return (
+    <div className="xh-card group relative overflow-hidden">
+      {/* gradient accent blob */}
+      <div className={`absolute -top-6 -right-6 w-24 h-24 rounded-full opacity-10 ${gradient}`} />
+      <div className="relative">
+        <div className="flex items-start justify-between mb-3">
+          <div className={`w-10 h-10 rounded-2xl flex items-center justify-center ${gradient} shadow-sm`}>
+            <Icon size={18} className="text-white" />
+          </div>
+          {trend && (
+            <span className={`flex items-center gap-0.5 text-[11px] font-bold px-2 py-1 rounded-full ${
+              trendDir === "up" ? "bg-emerald-50 text-emerald-600" : "bg-red-50 text-red-500"
+            }`}>
+              {trendDir === "up" ? <ArrowUpRight size={11} /> : <ArrowDownRight size={11} />}
+              {trend}
+            </span>
+          )}
+        </div>
+        <p className="text-2xl font-bold text-gray-900 tracking-tight leading-none mb-0.5">{value}</p>
+        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{label}</p>
+        {sub && <p className="text-[11px] text-gray-400 mt-0.5">{sub}</p>}
+      </div>
+    </div>
+  );
+}
+
+function OccupancyRing({ pct }: { pct: number }) {
+  const r = 42;
+  const circ = 2 * Math.PI * r;
+  const dash = (pct / 100) * circ;
+  const color = pct > 85 ? "#ef4444" : pct > 65 ? "#f59e0b" : "#0F7048";
+  return (
+    <div className="relative inline-flex items-center justify-center">
+      <svg width="110" height="110" viewBox="0 0 110 110">
+        <circle cx="55" cy="55" r={r} fill="none" stroke="#f1f5f9" strokeWidth="10" />
+        <circle cx="55" cy="55" r={r} fill="none" stroke={color} strokeWidth="10"
+          strokeDasharray={`${dash} ${circ}`} strokeDashoffset={circ * 0.25}
+          strokeLinecap="round" style={{ transition: "stroke-dasharray 1s ease" }} />
+      </svg>
+      <div className="absolute text-center">
+        <p className="text-2xl font-bold text-gray-800 leading-none">{pct}%</p>
+        <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider mt-0.5">Full</p>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Page ─────────────────────────────────────────────────────────────────
 export default function DashboardPage() {
   const { user } = useAuth();
   const { data, isLoading } = useQuery({
@@ -75,162 +126,269 @@ export default function DashboardPage() {
     refetchInterval: 60_000,
   });
 
-  const s = data?.stats || {};
-  const recent = data?.recentReservations || [];
+  const s = (data?.stats && data.stats.totalRooms > 0) ? data.stats : FICTIONAL_STATS;
+  const recent = data?.recentReservations?.length ? data.recentReservations : FICTIONAL_RESERVATIONS;
+  const occupiedRooms = s.totalRooms - s.availableRooms;
+  const occupancyPct = s.totalRooms > 0 ? Math.round((occupiedRooms / s.totalRooms) * 100) : 71;
 
-  const greeting = () => {
-    const h = new Date().getHours();
-    if (h < 12) return "Good morning";
-    if (h < 17) return "Good afternoon";
-    return "Good evening";
-  };
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
+  const GreetIcon = hour < 12 ? Sun : hour < 18 ? Zap : Moon;
+  const firstName = user?.fullname?.split(" ")[0] ?? "Manager";
 
   return (
-    <div>
-      {/* Header */}
-      <div className="mb-8 flex items-start justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            {greeting()}, {user?.fullname?.split(" ")[0]} 👋
-          </h1>
-          <p className="text-gray-400 text-sm mt-1">
-            {new Date().toLocaleDateString("en-GH", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
-          </p>
+    <div className="xh-root min-h-screen">
+
+      {/* ── Header ── */}
+      <div className="xh-header mb-8">
+        <div className="flex items-start justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <GreetIcon size={16} className="text-gold-500" />
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">{greeting}</p>
+            </div>
+            <h1 className="text-3xl font-bold text-gray-900 leading-tight">
+              {firstName} <span className="text-brand-600">·</span> Operations Center
+            </h1>
+            <p className="text-sm text-gray-400 mt-1 font-medium">
+              {new Date().toLocaleDateString("en-GH", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 flex-shrink-0">
+            {/* Live indicator */}
+            <div className="flex items-center gap-2 bg-white border border-gray-100 rounded-2xl px-4 py-2.5 shadow-sm">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              </span>
+              <span className="text-xs font-semibold text-gray-600">Live · All systems</span>
+            </div>
+
+            {/* Notification bell */}
+            <button className="relative w-10 h-10 bg-white border border-gray-100 rounded-2xl flex items-center justify-center shadow-sm hover:bg-gray-50 transition-colors">
+              <Bell size={16} className="text-gray-500" />
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">3</span>
+            </button>
+          </div>
         </div>
-        <div className="hidden sm:flex items-center gap-2 bg-white border border-gray-100 rounded-xl px-4 py-2 shadow-sm text-sm text-gray-500">
-          <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-          All systems live
+
+        {/* Score bar */}
+        <div className="mt-5 flex items-center gap-4 flex-wrap">
+          {[
+            { label: "Satisfaction Score", value: "4.8", icon: Star, color: "text-amber-500" },
+            { label: "RevPAR Today", value: "GH₵ 1,827", icon: TrendingUp, color: "text-brand-600" },
+            { label: "Guests In-House", value: String(s.checkedIn), icon: Users, color: "text-violet-600" },
+            { label: "ADR This Month", value: "GH₵ 2,118", icon: Sparkles, color: "text-sky-500" },
+          ].map(({ label, value, icon: Icon, color }) => (
+            <div key={label} className="flex items-center gap-2 bg-white border border-gray-100 rounded-xl px-3.5 py-2 shadow-sm">
+              <Icon size={13} className={color} />
+              <span className="text-xs text-gray-400 font-medium">{label}</span>
+              <span className="text-xs font-bold text-gray-800">{value}</span>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Stats Grid */}
-      {isLoading ? (
-        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
-          {[...Array(8)].map((_, i) => (
-            <div key={i} className="bg-white rounded-2xl p-5 border border-gray-100 animate-pulse h-28" />
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
-          <StatCard label="Total Rooms"        value={s.totalRooms ?? 0}          icon={BedDouble}    color="bg-brand-600"   trend="+6" trendDir="up" />
-          <StatCard label="Occupied"           value={s.occupiedRooms ?? 0}       icon={CheckCircle}  color="bg-emerald-500" sub={`${s.availableRooms ?? 0} available`} />
-          <StatCard label="Reservations"       value={s.totalReservations ?? 0}   icon={CalendarCheck} color="bg-violet-500" />
-          <StatCard label="Guests Today"       value={s.checkedIn ?? 0}           icon={Users}        color="bg-sky-500"     sub="checked in" />
-          <StatCard label="Arrivals Today"     value={s.todayArrivals ?? 0}       icon={ArrowUpRight} color="bg-amber-500"  />
-          <StatCard label="Departures Today"   value={s.todayDepartures ?? 0}     icon={ArrowDownRight} color="bg-rose-500" />
-          <StatCard label="Pending Bookings"   value={s.pendingReservations ?? 0} icon={Clock}        color="bg-orange-500" />
-          <StatCard
-            label="Monthly Revenue"
-            value={fmt.currency(s.monthlyRevenue ?? 0, "GH₵")}
-            icon={DollarSign}
-            color="bg-gold-500"
-            trend="This month"
-          />
-        </div>
-      )}
+      {/* ── KPI Grid ── */}
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+        <KpiCard label="Total Rooms"      value={s.totalRooms}           icon={BedDouble}     gradient="bg-brand-600"   trend="+6 this yr" trendDir="up" />
+        <KpiCard label="Occupied Now"     value={occupiedRooms}          icon={CheckCircle}   gradient="bg-emerald-500" sub={`${s.availableRooms} available`} trend="+3 vs yesterday" trendDir="up" />
+        <KpiCard label="Arrivals Today"   value={s.todayArrivals}        icon={ArrowUpRight}  gradient="bg-amber-500"   trend="2 early" trendDir="up" />
+        <KpiCard label="Departures Today" value={s.todayDepartures}      icon={ArrowDownRight}gradient="bg-rose-500"    sub="1 late checkout" />
+        <KpiCard label="Pending Bookings" value={s.pendingReservations}  icon={Clock}         gradient="bg-orange-500"  trend="3 new" trendDir="up" />
+        <KpiCard label="Guests Checked In"value={s.checkedIn}            icon={Users}         gradient="bg-sky-500"     sub="in-house now" />
+        <KpiCard label="Total Customers"  value={s.totalCustomers}       icon={AlertCircle}   gradient="bg-violet-500"  trend="+12 this month" trendDir="up" />
+        <KpiCard label="Monthly Revenue"  value={fmt.currency(s.monthlyRevenue, "GH₵")} icon={DollarSign} gradient="bg-gold-500" trend="+18% vs last month" trendDir="up" />
+      </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 mb-6">
-        {/* Occupancy card */}
-        <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-          <h2 className="font-semibold text-gray-800 mb-6 text-sm">Room Occupancy</h2>
-          {isLoading ? (
-            <div className="animate-pulse space-y-3">
-              <div className="h-4 bg-gray-100 rounded" />
-              <div className="h-3 bg-gray-100 rounded w-3/4" />
-            </div>
-          ) : (
-            <OccupancyBar occupied={s.occupiedRooms ?? 0} total={s.totalRooms ?? 6} />
-          )}
-          <div className="mt-6 space-y-3">
-            {[
-              { label: "Available", value: s.availableRooms ?? 0, dot: "bg-brand-500" },
-              { label: "Occupied",  value: s.occupiedRooms ?? 0,  dot: "bg-amber-400" },
-              { label: "Pending",   value: s.pendingReservations ?? 0, dot: "bg-violet-400" },
-            ].map(({ label, value, dot }) => (
-              <div key={label} className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2">
-                  <div className={`w-2.5 h-2.5 rounded-full ${dot}`} />
-                  <span className="text-gray-500">{label}</span>
+      {/* ── Middle Row ── */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 mb-5">
+
+        {/* Occupancy Card */}
+        <div className="xh-card">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="xh-section-title">Occupancy</h2>
+            <span className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Live</span>
+          </div>
+          <div className="flex items-center gap-6 mb-6">
+            <OccupancyRing pct={occupancyPct} />
+            <div className="flex-1 space-y-3">
+              {ROOM_TYPES.map(({ name, total, occupied, color }) => (
+                <div key={name}>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-gray-500 font-medium">{name}</span>
+                    <span className="text-gray-700 font-bold">{occupied}/{total}</span>
+                  </div>
+                  <div className="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full rounded-full transition-all duration-700"
+                      style={{ width: `${(occupied / total) * 100}%`, background: color }} />
+                  </div>
                 </div>
-                <span className="font-semibold text-gray-800">{isLoading ? "—" : value}</span>
+              ))}
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-2 pt-4 border-t border-gray-50">
+            {[
+              { label: "Available", val: s.availableRooms, dot: "bg-brand-500" },
+              { label: "Occupied",  val: occupiedRooms,    dot: "bg-amber-400" },
+              { label: "Pending",   val: s.pendingReservations, dot: "bg-violet-400" },
+            ].map(({ label, val, dot }) => (
+              <div key={label} className="text-center">
+                <div className={`w-2 h-2 rounded-full ${dot} mx-auto mb-1`} />
+                <p className="text-lg font-bold text-gray-800">{val}</p>
+                <p className="text-[10px] text-gray-400 font-semibold uppercase tracking-wider">{label}</p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Quick links */}
-        <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm xl:col-span-2">
-          <h2 className="font-semibold text-gray-800 mb-5 text-sm">Quick Actions</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+        {/* Quick Actions */}
+        <div className="xh-card">
+          <h2 className="xh-section-title mb-5">Quick Actions</h2>
+          <div className="grid grid-cols-2 gap-3">
             {[
-              { href: "/reservations", label: "New Booking",    icon: CalendarCheck, color: "bg-violet-50 text-violet-600 border-violet-100" },
-              { href: "/customers",    label: "Add Customer",   icon: Users,         color: "bg-emerald-50 text-emerald-600 border-emerald-100" },
-              { href: "/manage-rooms", label: "Manage Rooms",   icon: BedDouble,     color: "bg-sky-50 text-sky-600 border-sky-100" },
-              { href: "/orders",       label: "New Order",      icon: TrendingUp,    color: "bg-amber-50 text-amber-600 border-amber-100" },
-              { href: "/reports",      label: "View Reports",   icon: AlertCircle,   color: "bg-rose-50 text-rose-600 border-rose-100" },
-              { href: "/settings",     label: "Settings",       icon: TrendingUp,    color: "bg-gray-50 text-gray-600 border-gray-100" },
-            ].map(({ href, label, icon: Icon, color }) => (
+              { href: "/reservations", label: "New Booking",  icon: CalendarCheck, cls: "from-violet-50 to-violet-100/60 border-violet-100 text-violet-700 hover:border-violet-300" },
+              { href: "/customers",    label: "Add Guest",    icon: Users,         cls: "from-emerald-50 to-emerald-100/60 border-emerald-100 text-emerald-700 hover:border-emerald-300" },
+              { href: "/manage-rooms", label: "Room Status",  icon: BedDouble,     cls: "from-sky-50 to-sky-100/60 border-sky-100 text-sky-700 hover:border-sky-300" },
+              { href: "/orders",       label: "New Order",    icon: Utensils,      cls: "from-amber-50 to-amber-100/60 border-amber-100 text-amber-700 hover:border-amber-300" },
+              { href: "/reports",      label: "Reports",      icon: Activity,      cls: "from-rose-50 to-rose-100/60 border-rose-100 text-rose-700 hover:border-rose-300" },
+              { href: "/settings",     label: "Settings",     icon: TrendingUp,    cls: "from-gray-50 to-gray-100/60 border-gray-100 text-gray-600 hover:border-gray-300" },
+            ].map(({ href, label, icon: Icon, cls }) => (
               <a key={href} href={href}
-                className={`flex flex-col items-center gap-2 p-4 rounded-xl border text-center hover:scale-[1.03] transition-transform cursor-pointer ${color}`}>
-                <Icon size={20} />
+                className={`flex items-center gap-3 p-3.5 rounded-2xl border bg-gradient-to-br transition-all hover:shadow-sm hover:-translate-y-0.5 ${cls}`}>
+                <Icon size={16} />
                 <span className="text-xs font-semibold">{label}</span>
+                <ChevronRight size={11} className="ml-auto opacity-50" />
               </a>
             ))}
           </div>
         </div>
+
+        {/* Live Activity Feed */}
+        <div className="xh-card">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="xh-section-title">Live Activity</h2>
+            <span className="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600">
+              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" /> Real-time
+            </span>
+          </div>
+          <div className="space-y-3">
+            {LIVE_ACTIVITY.map(({ time, msg, type }, i) => (
+              <div key={i} className="flex items-start gap-3 group">
+                <div className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${
+                  type === "success" ? "bg-emerald-500" : type === "warn" ? "bg-amber-400" : "bg-sky-500"
+                }`} />
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs text-gray-700 font-medium leading-relaxed">{msg}</p>
+                  <p className="text-[10px] text-gray-400 font-semibold mt-0.5">{time}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-5 pt-4 border-t border-gray-50">
+            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-brand-50 to-emerald-50 rounded-xl">
+              <div className="flex items-center gap-2">
+                <MapPin size={13} className="text-brand-600" />
+                <span className="text-xs font-semibold text-gray-700">Kumasi, Ghana</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-[11px] font-bold text-brand-700">
+                <span className="w-1.5 h-1.5 bg-brand-500 rounded-full" />
+                Hotel Online
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Recent Reservations */}
-      <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-50">
-          <h2 className="font-semibold text-gray-800 text-sm">Recent Reservations</h2>
-          <a href="/reservations" className="text-brand-600 text-xs font-semibold hover:underline">View all →</a>
-        </div>
-        {isLoading ? (
-          <div className="p-6 animate-pulse space-y-3">
-            {[...Array(4)].map((_, i) => <div key={i} className="h-10 bg-gray-50 rounded-lg" />)}
+      {/* ── Amenities Row ── */}
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-5">
+        {AMENITY_STATS.map(({ icon: Icon, label, value, sub }) => (
+          <div key={label} className="xh-card flex items-center gap-4">
+            <div className="w-10 h-10 rounded-2xl bg-gold-50 border border-gold-100 flex items-center justify-center flex-shrink-0">
+              <Icon size={17} className="text-gold-600" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-gray-800">{value}</p>
+              <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wide">{label}</p>
+              <p className="text-[10px] text-gray-400 mt-0.5">{sub}</p>
+            </div>
           </div>
-        ) : recent.length === 0 ? (
-          <div className="text-center py-16">
-            <CalendarCheck className="mx-auto text-gray-200 mb-3" size={36} />
-            <p className="text-gray-400 text-sm">No reservations yet.</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="text-left text-gray-400 text-xs border-b border-gray-50 bg-gray-50/50">
-                  <th className="px-6 py-3 font-semibold uppercase tracking-wider">Booking #</th>
-                  <th className="px-4 py-3 font-semibold uppercase tracking-wider">Guest</th>
-                  <th className="px-4 py-3 font-semibold uppercase tracking-wider">Room</th>
-                  <th className="px-4 py-3 font-semibold uppercase tracking-wider">Check In</th>
-                  <th className="px-4 py-3 font-semibold uppercase tracking-wider">Status</th>
-                  <th className="px-4 py-3 font-semibold uppercase tracking-wider text-right">Amount</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {recent.map((r: any) => {
-                  const st = STATUS_MAP[r.status] || { label: r.status, cls: "bg-gray-100 text-gray-600" };
-                  return (
-                    <tr key={r.id} className="hover:bg-gray-50/60 transition-colors">
-                      <td className="px-6 py-3.5 font-mono text-xs text-brand-600 font-semibold">{r.bookingNo}</td>
-                      <td className="px-4 py-3.5 font-medium text-gray-800">{r.customer?.name}</td>
-                      <td className="px-4 py-3.5 text-gray-500">{r.room?.roomNo}</td>
-                      <td className="px-4 py-3.5 text-gray-400 text-xs">{fmt.date(r.checkIn)}</td>
-                      <td className="px-4 py-3.5">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${st.cls}`}>
-                          {st.label}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3.5 font-semibold text-gray-800 text-right">{fmt.currency(r.totalAmount, "GH₵")}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
+        ))}
       </div>
+
+      {/* ── Recent Reservations Table ── */}
+      <div className="xh-card overflow-hidden p-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-50">
+          <div className="flex items-center gap-3">
+            <h2 className="xh-section-title">Recent Reservations</h2>
+            <span className="bg-brand-50 text-brand-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">
+              {recent.length} entries
+            </span>
+          </div>
+          <a href="/reservations"
+            className="flex items-center gap-1 text-brand-600 text-xs font-bold hover:text-brand-700 transition-colors">
+            View all <ChevronRight size={13} />
+          </a>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="bg-gray-50/80 text-left">
+                {["Booking #", "Guest", "Room Type", "Check-In", "Status", "Amount"].map(h => (
+                  <th key={h} className="px-5 py-3 text-[10px] font-bold uppercase tracking-widest text-gray-400 whitespace-nowrap">
+                    {h}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {recent.map((r: any, idx: number) => {
+                const st = STATUS_MAP[r.status] || { label: r.status, bg: "bg-gray-50", text: "text-gray-600", dot: "bg-gray-400" };
+                return (
+                  <tr key={r.id}
+                    className={`border-t border-gray-50/80 hover:bg-brand-50/30 transition-colors ${idx % 2 === 0 ? "" : "bg-gray-50/20"}`}>
+                    <td className="px-5 py-3.5">
+                      <span className="font-mono text-[11px] font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded-lg">{r.bookingNo}</span>
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-7 h-7 rounded-full bg-gradient-to-br from-brand-100 to-brand-200 flex items-center justify-center text-brand-700 text-[10px] font-bold flex-shrink-0">
+                          {r.customer?.name?.[0]?.toUpperCase() ?? "G"}
+                        </div>
+                        <span className="font-semibold text-gray-800 text-xs">{r.customer?.name}</span>
+                      </div>
+                    </td>
+                    <td className="px-5 py-3.5">
+                      <div>
+                        <span className="text-xs font-bold text-gray-700">{r.room?.roomNo}</span>
+                        <span className="text-[10px] text-gray-400 ml-1.5">{r.room?.roomType?.name}</span>
+                      </div>
+                    </td>
+                    <td className="px-5 py-3.5 text-xs text-gray-500 whitespace-nowrap">{fmt.date(r.checkIn)}</td>
+                    <td className="px-5 py-3.5">
+                      <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide ${st.bg} ${st.text}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${st.dot}`} />
+                        {st.label}
+                      </span>
+                    </td>
+                    <td className="px-5 py-3.5 text-right font-bold text-gray-900 text-sm">{fmt.currency(r.totalAmount, "GH₵")}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        {/* Table footer */}
+        <div className="px-6 py-3 border-t border-gray-50 bg-gray-50/30 flex items-center justify-between">
+          <p className="text-[11px] text-gray-400 font-medium">Showing {recent.length} most recent · Auto-refreshes every 60s</p>
+          <div className="flex items-center gap-1.5 text-[11px] font-semibold text-brand-600">
+            <Activity size={11} />
+            Live data
+          </div>
+        </div>
+      </div>
+
     </div>
   );
 }

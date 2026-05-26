@@ -378,3 +378,46 @@ textarea.input {
 
 /* Dashboard page background */
 .dashboard-bg { background: #F6F8FA; }
+
+/* ══════════════════════════════════════════
+   NEW DASHBOARD DESIGN SYSTEM (XH v2)
+   Light, airy, modern hotel PMS
+══════════════════════════════════════════ */
+
+/* Page root */
+.xh-root {
+  background: #F7F9FC;
+}
+
+/* Card — primary surface */
+.xh-card {
+  background: #ffffff;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(0,0,0,0.055);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+  padding: 1.5rem;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.xh-card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 8px 28px rgba(0,0,0,0.07);
+}
+
+/* Section heading */
+.xh-section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1a1a2e;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+/* KPI card hover lift */
+.xh-card.group:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.09);
+}
+
+/* gold-600 utility */
+.text-gold-600 { color: #8A6400; }
+.bg-gold-50 { background-color: #FFFDF0; }
+.border-gold-100 { border-color: #FDF3D0; }
