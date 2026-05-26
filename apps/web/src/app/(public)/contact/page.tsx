@@ -174,7 +174,7 @@ export default function ContactPage() {
                   <div>
                     <h2 className="font-display font-semibold text-brand-900 text-xl"
                         style={{ fontFamily: "var(--font-display)" }}>Send Us a Message</h2>
-                    <p className="text-gray-400 text-xs mt-0.5">We'll respond within 2 hours</p>
+                    <p className="text-gray-400 text-xs mt-0.5">We&apos;ll respond within 2 hours</p>
                   </div>
                 </div>
 

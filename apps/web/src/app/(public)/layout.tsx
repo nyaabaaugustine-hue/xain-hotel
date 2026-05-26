@@ -102,7 +102,7 @@ function PublicFooter() {
             </div>
           </div>
           <p className="text-white/25 text-xs leading-relaxed mb-5">
-            Redefining luxury hospitality on Ghana's Gold Coast since 2010.
+            Redefining luxury hospitality on Ghana&apos;s Gold Coast since 2010.
           </p>
           <div className="flex flex-col gap-2.5 text-[11px] text-white/25">
             <div className="flex items-center gap-2"><Phone size={11} /><span>+233 30 100 0000</span></div>

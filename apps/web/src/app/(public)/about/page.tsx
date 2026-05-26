@@ -62,7 +62,7 @@ export default function AboutPage() {
           </h1>
           <p className="text-white/40 text-base max-w-2xl mx-auto font-light leading-relaxed">
             Since 2010, SMIC360 Softwares has been a haven of elegance and warmth — where world-class hospitality
-            meets a deep commitment to Ghanaian heritage and every guest's well-being.
+            meets a deep commitment to Ghanaian heritage and every guest&apos;s well-being.
           </p>
         </div>
       </section>
@@ -78,7 +78,7 @@ export default function AboutPage() {
               A Legacy Born on the<br /><em className="text-gold-500 not-italic">Gold Coast</em>
             </h2>
             <p className="text-gray-500 leading-relaxed mb-5 font-light text-[15px]">
-              Founded with a simple conviction — that Ghana deserves world-class luxury on its own terms — SMIC360 Softwares has grown from a boutique Cantonments property into one of West Africa's most celebrated hospitality destinations.
+              Founded with a simple conviction — that Ghana deserves world-class luxury on its own terms — SMIC360 Softwares has grown from a boutique Cantonments property into one of West Africa&apos;s most celebrated hospitality destinations.
             </p>
             <p className="text-gray-400 leading-relaxed mb-8 font-light text-[15px]">
               Our 150+ dedicated professionals work tirelessly to ensure every stay is seamless, every meal is memorable, and every guest leaves feeling enriched by the culture and warmth of Ghana.

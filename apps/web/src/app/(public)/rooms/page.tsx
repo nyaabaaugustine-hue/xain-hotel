@@ -263,7 +263,7 @@ export default function RoomsPage() {
           <div className="gold-line mx-auto mb-6" />
           <h2 className="font-display font-light text-white mb-3"
               style={{ fontFamily: "var(--font-display)", fontSize: "clamp(1.8rem,4vw,2.8rem)" }}>
-            Can't find what you're looking for?
+            Can&apos;t find what you&apos;re looking for?
           </h2>
           <p className="text-white/40 mb-8 text-sm font-light">Our concierge team is delighted to help you find the perfect room.</p>
           <Link href="/contact"

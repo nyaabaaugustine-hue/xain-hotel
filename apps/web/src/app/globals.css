@@ -359,3 +359,22 @@ textarea.input {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(232,180,51,0.4), transparent);
 }
+
+/* ══════════════════════════════════════════
+   DASHBOARD UTILITIES
+══════════════════════════════════════════ */
+
+/* Gold stat card */
+.bg-gold-500 { background-color: #C49100; }
+
+/* Dashboard table row */
+.table-row-hover:hover { background: #F8FAFB; }
+
+/* Scrollbar (dashboard sidebar) */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.22); }
+
+/* Dashboard page background */
+.dashboard-bg { background: #F6F8FA; }

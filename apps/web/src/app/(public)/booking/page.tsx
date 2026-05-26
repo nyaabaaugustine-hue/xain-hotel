@@ -58,6 +58,33 @@ function BookingForm() {
     notes:         "",
   });
 
+  // Persist form data to prevent disappearing during re-renders
+  useEffect(() => {
+    if (form.checkIn && form.checkOut && form.name && form.email) {
+      // Save to sessionStorage to persist across refreshes
+      try {
+        sessionStorage.setItem('bookingFormData', JSON.stringify(form));
+      } catch (e) {
+        console.warn('Failed to save form data:', e);
+      }
+    }
+  }, [form]);
+
+  // Restore form data on mount
+  useEffect(() => {
+    try {
+      const saved = sessionStorage.getItem('bookingFormData');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed && typeof parsed === 'object') {
+          setForm(prev => ({ ...prev, ...parsed }));
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to restore form data:', e);
+    }
+  }, []);
+
   useEffect(() => {
     fetch(`${API}/public/rooms`)
       .then(r => r.json())
@@ -510,7 +537,7 @@ export default function BookingPage() {
             Book Your Stay
           </h1>
           <p className="text-white/40 text-base max-w-lg mx-auto font-light">
-            Reserve your room in just three easy steps. We'll take care of the rest.
+            Reserve your room in just three easy steps. We&apos;ll take care of the rest.
           </p>
         </div>
       </section>
