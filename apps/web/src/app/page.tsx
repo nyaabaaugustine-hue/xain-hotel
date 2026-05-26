@@ -8,7 +8,7 @@ import {
   BedDouble, Wifi, Car, Utensils, Phone, Mail, MapPin,
   Star, ChevronRight, Coffee, Shield, Waves, ArrowRight,
   ChevronLeft, Clock, Flame, Leaf, Wine, UtensilsCrossed,
-  Sparkles, Award, Globe, Play, Quote, Check,
+  Sparkles, Award, Globe, Play, Quote, Check, Menu, X,
 } from "lucide-react";
 import { IMAGES } from "@/lib/images";
 
@@ -83,14 +83,230 @@ const EVENTS = [
   { date: "JUL 12", title: "Kente Weaving Workshop", time: "10:00 AM",location: "Cultural Hall", tag: "Culture" },
 ];
 
-const GALLERY_IMAGES = [
-  { src: IMAGES.pool,   alt: "Rooftop pool at sunset",          span: "col-span-2 row-span-2" },
-  { src: CL.roomKente,  alt: "Kente Suite interior",            span: "" },
-  { src: IMAGES.beach,  alt: "Beachside hammocks",              span: "" },
-  { src: CL.lobby,      alt: "Hotel lobby lounge",              span: "" },
-  { src: CL.aerial,     alt: "Accra coastline aerial",          span: "" },
-  { src: IMAGES.g1,     alt: "Hotel gallery",                   span: "col-span-2" },
+// ── Mega Nav ─────────────────────────────────────────────────────────────
+const NAV_ITEMS = [
+  {
+    label: "Stay",
+    href: "/rooms",
+    mega: [
+      { label: "Classic Room",       sub: "From GH₵ 250 / night", href: "/rooms" },
+      { label: "Deluxe Garden Room", sub: "From GH₵ 350 / night", href: "/rooms" },
+      { label: "Executive Room",     sub: "From GH₵ 420 / night", href: "/rooms" },
+      { label: "Kente Suite",        sub: "★ Most Loved — GH₵ 480", href: "/rooms" },
+      { label: "Sky Penthouse",      sub: "From GH₵ 750 / night", href: "/rooms" },
+      { label: "Presidential Suite", sub: "From GH₵ 950 / night", href: "/rooms" },
+    ],
+  },
+  {
+    label: "Dine",
+    href: "/restaurant",
+    mega: [
+      { label: "Gold Coast Restaurant", sub: "Fine dining, 7 AM – 10 PM", href: "/restaurant" },
+      { label: "Skybar & Lounge",        sub: "Cocktails & bites, 6 PM – 1 AM", href: "/restaurant" },
+      { label: "In-Suite Dining",        sub: "Available 24 hours", href: "/restaurant" },
+      { label: "Private Dining",         sub: "Events & celebrations", href: "/contact" },
+    ],
+  },
+  {
+    label: "Experience",
+    href: "/#amenities",
+    mega: [
+      { label: "Rooftop Infinity Pool", sub: "Open sunrise to sunset", href: "/#amenities" },
+      { label: "Spa & Wellness",        sub: "Coming soon", href: "/#amenities" },
+      { label: "Cultural Experiences",  sub: "Kente, drumming & more", href: "/#amenities" },
+      { label: "Events & Meetings",     sub: "World-class event spaces", href: "/contact" },
+    ],
+  },
+  { label: "About",   href: "/about",   mega: null },
+  { label: "Contact", href: "/contact", mega: null },
 ];
+
+function MegaNav({ scrolled }: { scrolled: boolean }) {
+  const [open, setOpen] = useState<string | null>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) setOpen(null);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  return (
+    <nav
+      ref={navRef}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? "bg-brand-900/98 backdrop-blur-xl shadow-xl shadow-black/30 border-b border-white/5"
+          : "bg-transparent"
+      }`}
+    >
+      {/* Top bar */}
+      <div className={`hidden lg:block border-b transition-all duration-500 ${scrolled ? "border-white/5 py-2" : "border-white/8 py-2.5"}`}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between">
+          <div className="flex items-center gap-6 text-[10px] text-white/30 tracking-widest">
+            <span className="flex items-center gap-1.5"><MapPin size={9} className="text-gold-400/50" /> Cantonments, Accra, Ghana</span>
+            <span className="flex items-center gap-1.5"><Phone size={9} className="text-gold-400/50" /> +233 30 000 0000</span>
+            <span className="flex items-center gap-1.5"><Mail size={9} className="text-gold-400/50" /> reservations@xainhotel.com</span>
+          </div>
+          <div className="flex items-center gap-6 text-[10px] text-white/30 tracking-widest">
+            <span>Forbes ★★★★★</span>
+            <span className="h-3 w-px bg-white/10" />
+            <span>Best Rate When You Book Direct</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main nav bar */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="flex items-center justify-between h-16 lg:h-20">
+          {/* Logo */}
+          <Link href="/" className="flex flex-col leading-none group" onClick={() => { setOpen(null); setMobileOpen(false); }}>
+            <span
+              className="font-display font-semibold text-white tracking-[0.18em] text-2xl group-hover:text-gold-400 transition-colors duration-300"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              XAIN
+            </span>
+            <span className="text-gold-400/50 text-[7px] tracking-[0.55em] uppercase font-light mt-0.5">
+              Hotel & Residences
+            </span>
+          </Link>
+
+          {/* Desktop nav links */}
+          <div className="hidden lg:flex items-center gap-1">
+            {NAV_ITEMS.map((item) => (
+              <div key={item.label} className="relative">
+                {item.mega ? (
+                  <button
+                    onMouseEnter={() => setOpen(item.label)}
+                    onMouseLeave={() => setOpen(null)}
+                    onClick={() => setOpen(open === item.label ? null : item.label)}
+                    className={`flex items-center gap-1 px-4 py-2 text-[11px] font-medium tracking-[0.15em] uppercase transition-all duration-200 rounded-lg ${
+                      open === item.label
+                        ? "text-gold-400 bg-white/5"
+                        : "text-white/65 hover:text-white hover:bg-white/5"
+                    }`}
+                  >
+                    {item.label}
+                    <ChevronRight
+                      size={10}
+                      className={`transition-transform duration-200 ${open === item.label ? "rotate-90 text-gold-400" : ""}`}
+                    />
+                  </button>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className="px-4 py-2 text-[11px] font-medium tracking-[0.15em] uppercase text-white/65 hover:text-white hover:bg-white/5 transition-all duration-200 rounded-lg block"
+                  >
+                    {item.label}
+                  </Link>
+                )}
+
+                {/* Mega dropdown */}
+                {item.mega && open === item.label && (
+                  <div
+                    onMouseEnter={() => setOpen(item.label)}
+                    onMouseLeave={() => setOpen(null)}
+                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-72 bg-brand-900/98 backdrop-blur-xl border border-white/8 rounded-2xl shadow-2xl shadow-black/50 overflow-hidden"
+                  >
+                    <div className="px-3 py-3 space-y-0.5">
+                      {item.mega.map((sub) => (
+                        <Link
+                          key={sub.label}
+                          href={sub.href}
+                          onClick={() => setOpen(null)}
+                          className="flex items-start justify-between px-4 py-3 rounded-xl hover:bg-white/5 group/sub transition-colors duration-150"
+                        >
+                          <div>
+                            <p className="text-white/80 text-[12px] font-medium group-hover/sub:text-gold-400 transition-colors">{sub.label}</p>
+                            <p className="text-white/30 text-[10px] font-light mt-0.5">{sub.sub}</p>
+                          </div>
+                          <ChevronRight size={12} className="text-white/20 group-hover/sub:text-gold-400 mt-1 flex-shrink-0 transition-colors" />
+                        </Link>
+                      ))}
+                    </div>
+                    <div className="border-t border-white/6 px-6 py-3">
+                      <Link
+                        href="/booking"
+                        onClick={() => setOpen(null)}
+                        className="text-gold-400/70 text-[10px] tracking-widest uppercase font-semibold hover:text-gold-400 transition-colors flex items-center gap-1.5"
+                      >
+                        Book Now <ArrowRight size={10} />
+                      </Link>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop CTA */}
+          <div className="hidden lg:flex items-center gap-3">
+            <Link href="/login" className="text-[10px] text-white/45 hover:text-white tracking-[0.15em] uppercase font-medium transition-colors px-3 py-2">
+              Sign In
+            </Link>
+            <Link href="/booking" className="xh-btn-gold text-[9px] px-7 py-2.5 tracking-[0.2em]">
+              Reserve Now
+            </Link>
+          </div>
+
+          {/* Mobile hamburger */}
+          <button
+            className="lg:hidden w-10 h-10 flex items-center justify-center text-white/60 hover:text-white transition-colors"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile drawer */}
+      {mobileOpen && (
+        <div className="lg:hidden bg-brand-900/98 backdrop-blur-xl border-t border-white/8">
+          <div className="max-w-7xl mx-auto px-6 py-6 space-y-1">
+            {NAV_ITEMS.map((item) => (
+              <div key={item.label}>
+                <Link
+                  href={item.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="block px-4 py-3 text-[12px] font-medium tracking-[0.15em] uppercase text-white/70 hover:text-white hover:bg-white/5 rounded-xl transition-colors"
+                >
+                  {item.label}
+                </Link>
+                {item.mega && (
+                  <div className="ml-4 mt-1 space-y-0.5 border-l border-white/8 pl-4">
+                    {item.mega.map((sub) => (
+                      <Link
+                        key={sub.label}
+                        href={sub.href}
+                        onClick={() => setMobileOpen(false)}
+                        className="block py-2 text-[11px] text-white/40 hover:text-gold-400 transition-colors"
+                      >
+                        {sub.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+            <div className="pt-4 border-t border-white/8 flex flex-col gap-3">
+              <Link href="/login" onClick={() => setMobileOpen(false)} className="text-center text-[10px] text-white/45 tracking-widest uppercase py-2">
+                Sign In
+              </Link>
+              <Link href="/booking" onClick={() => setMobileOpen(false)} className="xh-btn-gold text-[10px] py-3.5 text-center tracking-[0.2em]">
+                Reserve Now
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+}
 
 // ── Hero Slider ──────────────────────────────────────────────────────────
 function HeroSlider() {
@@ -117,7 +333,6 @@ function HeroSlider() {
 
   return (
     <section className="relative h-screen min-h-[700px] flex flex-col overflow-hidden bg-[#020C05]">
-      {/* Slides */}
       {HERO_SLIDES.map((slide, i) => {
         const active = i === current;
         return (
@@ -128,34 +343,28 @@ function HeroSlider() {
         );
       })}
 
-      {/* Overlays */}
       <div className="absolute inset-0 z-10" style={{ background: "linear-gradient(to bottom,rgba(2,12,5,0.4) 0%,rgba(2,12,5,0.1) 30%,rgba(2,12,5,0.15) 60%,rgba(2,12,5,0.85) 100%)" }} />
       <div className="absolute inset-0 z-10 adinkra-pattern opacity-[0.06]" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/3 w-[900px] h-[600px] bg-gold-400/4 rounded-full blur-[200px] z-10 pointer-events-none" />
 
-      {/* Content */}
       <div className="relative z-20 flex-1 flex flex-col items-center justify-center text-center px-6 max-w-6xl mx-auto w-full">
         {HERO_SLIDES.map((slide, i) => {
           const active = i === current;
           return (
             <div key={i} className="absolute inset-0 flex flex-col items-center justify-center px-6 pointer-events-none"
               style={{ opacity: active ? 1 : 0, transform: active ? "translateY(0)" : "translateY(24px)", transition: active ? "opacity 0.9s ease 0.25s,transform 0.9s cubic-bezier(0.22,1,0.36,1) 0.25s" : "opacity 0.4s ease,transform 0.4s ease", pointerEvents: active ? "auto" : "none" }}>
-              {/* Eyebrow */}
               <div className="flex items-center gap-4 mb-10">
                 <div className="h-px w-14 bg-gradient-to-r from-transparent to-gold-400/50" />
                 <p className="text-gold-400/80 text-[9px] font-medium tracking-[0.6em] uppercase">{slide.eyebrow}</p>
                 <div className="h-px w-14 bg-gradient-to-l from-transparent to-gold-400/50" />
               </div>
-              {/* Headline */}
               <h1 className="font-display font-light text-white leading-none mb-5 tracking-tight" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(5.5rem,14vw,11rem)", letterSpacing: "-0.01em" }}>{slide.headline}</h1>
-              {/* Sub */}
               <div className="flex items-center gap-5 mb-8">
                 <div className="h-px w-20 bg-gold-400/25" />
                 <span className="text-gold-400/65 tracking-[0.65em] uppercase text-sm font-light font-display" style={{ fontFamily: "var(--font-display)" }}>{slide.sub}</span>
                 <div className="h-px w-20 bg-gold-400/25" />
               </div>
               <p className="text-white/50 text-base max-w-lg mx-auto mb-14 leading-relaxed font-light whitespace-pre-line">{slide.body}</p>
-              {/* CTAs */}
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link href="/booking" className="xh-btn-gold text-[10px] px-14 py-4 tracking-[0.25em]">Reserve Your Stay</Link>
                 <Link href="/rooms" className="xh-btn-outline text-[10px] px-14 py-4 tracking-[0.25em]">Explore Rooms</Link>
@@ -163,14 +372,12 @@ function HeroSlider() {
             </div>
           );
         })}
-        {/* Spacer */}
         <div className="invisible pointer-events-none">
           <div className="mb-10 h-5" /><div style={{ fontSize: "clamp(5.5rem,14vw,11rem)" }}>X</div>
           <div className="mb-8 h-5" /><div className="mb-14 h-16" /><div className="h-12" />
         </div>
       </div>
 
-      {/* Arrows */}
       <button onClick={back} aria-label="Previous" className="absolute left-6 md:left-12 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-full border border-white/15 bg-white/5 backdrop-blur-sm flex items-center justify-center text-white/50 hover:border-gold-400/40 hover:text-gold-400 transition-all duration-300 hover:scale-110">
         <ChevronLeft size={20} />
       </button>
@@ -178,7 +385,6 @@ function HeroSlider() {
         <ArrowRight size={20} />
       </button>
 
-      {/* Slide dots */}
       <div className="absolute bottom-28 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3">
         {HERO_SLIDES.map((_, i) => (
           <button key={i} onClick={() => goTo(i)} aria-label={`Slide ${i + 1}`}>
@@ -187,19 +393,16 @@ function HeroSlider() {
         ))}
       </div>
 
-      {/* Slide counter */}
       <div className="absolute bottom-28 right-10 md:right-16 z-30 hidden md:flex items-center gap-2 text-[11px] font-light">
         <span className="text-gold-400/70 font-medium">{String(current + 1).padStart(2, "0")}</span>
         <span className="text-white/20">/</span>
         <span className="text-white/25">{String(total).padStart(2, "0")}</span>
       </div>
 
-      {/* Progress bar */}
       <div className="absolute bottom-0 left-0 right-0 z-30 h-[1.5px] bg-white/5">
         <div key={current} className="h-full bg-gradient-to-r from-gold-500 to-gold-300" style={{ animation: "heroProgress 6.5s linear forwards" }} />
       </div>
 
-      {/* Scroll cue */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 text-white/20">
         <div className="w-4.5 h-8 border border-white/12 rounded-full flex justify-center pt-1.5">
           <div className="w-0.5 h-1.5 bg-gold-400/35 rounded-full animate-bounce" />
@@ -214,9 +417,16 @@ function HeroSlider() {
 export default function RootPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const [scrolled, setScrolled] = useState(false);
   const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => { if (!loading && user) router.replace("/dashboard"); }, [user, loading, router]);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   if (loading) return (
     <div className="flex items-center justify-center min-h-screen bg-[#020C05]">
@@ -225,7 +435,11 @@ export default function RootPage() {
   );
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ fontFamily: "var(--font-body)" }}>
+
+      {/* ── MEGA NAV ── */}
+      <MegaNav scrolled={scrolled} />
+
       {/* ── HERO ── */}
       <HeroSlider />
 
@@ -266,13 +480,7 @@ export default function RootPage() {
       <section className="bg-[#020C05] border-b border-white/5">
         <div className="max-w-6xl mx-auto px-6 py-5">
           <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-3">
-            {[
-              "Forbes Five Stars 2024",
-              "Condé Nast Traveler · Top 10 Africa",
-              "TripAdvisor Traveler's Choice",
-              "World Luxury Hotel Awards",
-              "Rated 4.9 / 5 · 2,400+ Reviews",
-            ].map(a => (
+            {["Forbes Five Stars 2024","Condé Nast Traveler · Top 10 Africa","TripAdvisor Traveler's Choice","World Luxury Hotel Awards","Rated 4.9 / 5 · 2,400+ Reviews"].map(a => (
               <div key={a} className="flex items-center gap-2 text-white/25 text-[10px] tracking-widest">
                 <Star size={9} className="text-gold-400/50 fill-gold-400/50" />
                 {a}
@@ -290,17 +498,17 @@ export default function RootPage() {
             <p className="text-gold-500 text-[10px] font-semibold tracking-[0.45em] uppercase mb-6">The Xain Difference</p>
             <h2 className="font-display font-light text-brand-900 leading-[1.05] mb-8"
               style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.4rem,5vw,3.8rem)" }}>
-              West Africa's Most<br />
+              West Africa&apos;s Most<br />
               <em className="not-italic text-gold-500">Storied Hotel</em>
             </h2>
             <p className="text-gray-400 leading-relaxed mb-6 font-light text-[15px]">
-              Since 2010, Xain Hotel & Residences has reimagined what luxury means on the Gold Coast. Set in the exclusive Cantonments enclave, every room, every plate, every interaction is a celebration of Ghanaian artistry and global excellence.
+              Since 2010, Xain Hotel &amp; Residences has reimagined what luxury means on the Gold Coast. Set in the exclusive Cantonments enclave, every room, every plate, every interaction is a celebration of Ghanaian artistry and global excellence.
             </p>
             <p className="text-gray-400 leading-relaxed mb-10 font-light text-[15px]">
-              Our 150 dedicated professionals and our guests share one conviction — that the world's finest hospitality has always called Africa home.
+              Our 150 dedicated professionals and our guests share one conviction — that the world&apos;s finest hospitality has always called Africa home.
             </p>
             <div className="flex flex-wrap gap-8 mb-10">
-              {[["15+","Years"], ["80","Rooms"], ["150+","Team"], ["4.9★","Rating"]].map(([n,l]) => (
+              {[["15+","Years"],["80","Rooms"],["150+","Team"],["4.9★","Rating"]].map(([n,l]) => (
                 <div key={l}>
                   <p className="font-display font-semibold text-brand-800 text-2xl" style={{ fontFamily: "var(--font-display)" }}>{n}</p>
                   <p className="text-[10px] text-gray-400 tracking-[0.25em] uppercase mt-1">{l}</p>
@@ -311,7 +519,6 @@ export default function RootPage() {
               Our Story <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
-          {/* Image mosaic */}
           <div className="grid grid-cols-2 gap-4 h-[520px]">
             <div className="relative rounded-2xl overflow-hidden row-span-2">
               <Image src={CL.lobby} alt="Lobby lounge" fill className="object-cover" sizes="(max-width:1024px) 50vw,400px" />
@@ -341,7 +548,7 @@ export default function RootPage() {
             <div className="xh-goldline mx-auto mb-7" />
             <p className="text-gold-500 text-[10px] font-semibold tracking-[0.45em] uppercase mb-5">Accommodation</p>
             <h2 className="font-display font-light text-brand-900" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.2rem,4.5vw,3.5rem)" }}>
-              Rooms & Suites
+              Rooms &amp; Suites
             </h2>
             <p className="text-gray-400 mt-5 max-w-xl mx-auto text-sm font-light leading-relaxed">
               Six distinct accommodations — from refined comfort to full-floor presidential opulence. Every room a sanctuary.
@@ -381,7 +588,7 @@ export default function RootPage() {
           </div>
           <div className="text-center mt-12">
             <Link href="/rooms" className="xh-btn-outline-dark inline-flex items-center gap-2 text-[10px] px-12 py-4 tracking-[0.2em]">
-              View All Rooms & Rates <ArrowRight size={13} />
+              View All Rooms &amp; Rates <ArrowRight size={13} />
             </Link>
           </div>
         </div>
@@ -398,7 +605,7 @@ export default function RootPage() {
             Where Every Moment is Luxury
           </p>
           <p className="text-white/40 mt-5 text-sm max-w-lg font-light tracking-wide">
-            Cantonments, Accra — at the heart of Ghana's Diplomatic Enclave
+            Cantonments, Accra — at the heart of Ghana&apos;s Diplomatic Enclave
           </p>
           <div className="mt-10 flex gap-4">
             <Link href="/booking" className="xh-btn-gold text-[10px] px-10 py-3.5 tracking-[0.2em]">Reserve Now</Link>
@@ -468,7 +675,6 @@ export default function RootPage() {
                 Reserve a Table <ArrowRight size={13} />
               </Link>
             </div>
-            {/* Menu preview */}
             <div className="space-y-6">
               {RESTAURANT_MENU.map(({ category, items }) => (
                 <div key={category} className="border border-white/8 rounded-2xl overflow-hidden">
@@ -503,11 +709,11 @@ export default function RootPage() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { src: IMAGES.pool,   alt: "Rooftop pool",       cls: "col-span-2 row-span-2" },
-              { src: CL.roomKente,  alt: "Kente Suite",        cls: "" },
-              { src: IMAGES.beach,  alt: "Beachside",          cls: "" },
-              { src: CL.lobby,      alt: "Lobby lounge",       cls: "" },
-              { src: CL.aerial,     alt: "Accra aerial",       cls: "" },
+              { src: IMAGES.pool,      alt: "Rooftop pool",    cls: "col-span-2 row-span-2" },
+              { src: CL.roomKente,     alt: "Kente Suite",     cls: "" },
+              { src: IMAGES.beach,     alt: "Beachside",       cls: "" },
+              { src: CL.lobby,         alt: "Lobby lounge",    cls: "" },
+              { src: CL.aerial,        alt: "Accra aerial",    cls: "" },
               { src: CL.amenityDining, alt: "Fine dining",     cls: "col-span-2" },
             ].map(({ src, alt, cls }) => (
               <div key={alt} className={`relative overflow-hidden rounded-2xl group ${cls}`} style={{ height: cls.includes("row-span-2") ? "480px" : cls.includes("col-span-2") ? "200px" : "232px" }}>
@@ -527,7 +733,7 @@ export default function RootPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-14">
             <div className="xh-goldline mx-auto mb-7" />
-            <p className="text-gold-500 text-[10px] font-semibold tracking-[0.45em] uppercase mb-5">What's On</p>
+            <p className="text-gold-500 text-[10px] font-semibold tracking-[0.45em] uppercase mb-5">What&apos;s On</p>
             <h2 className="font-display font-light text-brand-900" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(2.2rem,4.5vw,3.5rem)" }}>
               Upcoming Events
             </h2>
@@ -577,7 +783,7 @@ export default function RootPage() {
                     <Star key={i} size={13} className="text-gold-400 fill-gold-400" />
                   ))}
                 </div>
-                <p className="text-gray-500 text-sm leading-relaxed font-light mb-8 italic">"{text}"</p>
+                <p className="text-gray-500 text-sm leading-relaxed font-light mb-8 italic">&ldquo;{text}&rdquo;</p>
                 <div className="flex items-center gap-4 pt-6 border-t border-gray-50">
                   <div className="w-11 h-11 rounded-full bg-gradient-to-br from-brand-100 to-brand-200 flex items-center justify-center text-brand-700 font-display font-bold text-base" style={{ fontFamily: "var(--font-display)" }}>
                     {name[0]}
