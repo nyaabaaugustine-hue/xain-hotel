@@ -15,6 +15,11 @@ interface Customer {
   status: number; createdAt: string;
 }
 
+const EMPTY_FORM = {
+  name: "", email: "", phone: "", address: "",
+  idType: "", idNumber: "", nationality: "",
+};
+
 const SEED_CUSTOMERS: Customer[] = [
   { id: 1,  name: "Amara Osei-Bonsu",     email: "amara@osei.gh",      phone: "+233 24 111 2233", nationality: "Ghanaian",  idType: "National ID",      idNumber: "GHA-1122334", address: "Cantonments, Accra",      status: 1, createdAt: "2025-01-15T10:00:00Z" },
   { id: 2,  name: "Dr. Kwame Asante",     email: "kwame@asante.gh",    phone: "+233 20 900 1122", nationality: "Ghanaian",  idType: "Passport",         idNumber: "G12345678",   address: "Airport Res., Accra",     status: 1, createdAt: "2025-01-20T09:00:00Z" },
@@ -68,62 +73,127 @@ function CustomerForm({
   const set = (k: string, v: string) => setForm(f => ({ ...f, [k]: v }));
 
   const handle = () => {
-    if (!form.name.trim()) { setErr("Guest name is required."); return; }
+    if (!form.name.trim()) { setErr("Full name is required."); return; }
     setErr(""); onSubmit(form);
   };
 
   return (
-    <>
-      {err && <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl">{err}</div>}
-      <div className="space-y-4">
-        <div>
-          <label className="label">Full Name *</label>
-          <input className="input" placeholder="e.g. Kofi Mensah" value={form.name} onChange={e => set("name", e.target.value)} />
+    <div className="space-y-5">
+      {err && (
+        <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl">
+          <span className="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+          {err}
         </div>
-        <div className="grid grid-cols-2 gap-3">
+      )}
+
+      {/* Section: Personal */}
+      <div>
+        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Personal Details</p>
+        <div className="space-y-3">
           <div>
-            <label className="label">Email</label>
-            <input type="email" className="input" placeholder="guest@email.com" value={form.email} onChange={e => set("email", e.target.value)} />
+            <label className="block text-xs font-semibold text-gray-700 mb-1.5">Full Name <span className="text-red-500">*</span></label>
+            <input
+              className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm text-gray-900 font-medium placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all bg-white"
+              placeholder="e.g. Kofi Asante Mensah"
+              value={form.name}
+              onChange={e => set("name", e.target.value)}
+              autoFocus
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Email Address</label>
+              <input
+                type="email"
+                className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all bg-white"
+                placeholder="guest@email.com"
+                value={form.email}
+                onChange={e => set("email", e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Phone Number</label>
+              <input
+                type="tel"
+                className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all bg-white"
+                placeholder="+233 20 000 0000"
+                value={form.phone}
+                onChange={e => set("phone", e.target.value)}
+              />
+            </div>
           </div>
           <div>
-            <label className="label">Phone</label>
-            <input type="tel" className="input" placeholder="+233 20 000 0000" value={form.phone} onChange={e => set("phone", e.target.value)} />
+            <label className="block text-xs font-semibold text-gray-700 mb-1.5">Home Address</label>
+            <input
+              className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all bg-white"
+              placeholder="Street, City, Country"
+              value={form.address}
+              onChange={e => set("address", e.target.value)}
+            />
           </div>
-        </div>
-        <div>
-          <label className="label">Address</label>
-          <input className="input" placeholder="Guest's address" value={form.address} onChange={e => set("address", e.target.value)} />
-        </div>
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="label">Nationality</label>
-            <input className="input" placeholder="e.g. Ghanaian" value={form.nationality} onChange={e => set("nationality", e.target.value)} />
-          </div>
-          <div>
-            <label className="label">ID Type</label>
-            <select className="input" value={form.idType} onChange={e => set("idType", e.target.value)}>
-              <option value="">— Select —</option>
-              <option>Passport</option>
-              <option>National ID</option>
-              <option>Voter ID</option>
-              <option>Driver's Licence</option>
-            </select>
-          </div>
-        </div>
-        {form.idType && (
-          <div>
-            <label className="label">ID Number</label>
-            <input className="input" placeholder="ID document number" value={form.idNumber} onChange={e => set("idNumber", e.target.value)} />
-          </div>
-        )}
-        <div className="flex gap-3 justify-end pt-2">
-          <button onClick={onClose} className="btn-secondary px-5 py-2 text-sm">Cancel</button>
-          <button onClick={handle} disabled={loading} className="btn-primary px-5 py-2 text-sm">
-            {loading ? "Saving…" : isEdit ? "Save Changes" : "Add Guest"}
-          </button>
         </div>
       </div>
-    </>
+
+      {/* Section: Identity */}
+      <div>
+        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3">Identity & Travel</p>
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Nationality</label>
+              <input
+                className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all bg-white"
+                placeholder="e.g. Ghanaian"
+                value={form.nationality}
+                onChange={e => set("nationality", e.target.value)}
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">ID Type</label>
+              <select
+                className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm text-gray-900 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all bg-white cursor-pointer"
+                value={form.idType}
+                onChange={e => set("idType", e.target.value)}
+              >
+                <option value="">— Select type —</option>
+                <option value="Passport">Passport</option>
+                <option value="National ID">National ID</option>
+                <option value="Voter ID">Voter ID</option>
+                <option value="Driver's Licence">Driver's Licence</option>
+              </select>
+            </div>
+          </div>
+          {form.idType && (
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">ID Number</label>
+              <input
+                className="w-full px-4 py-2.5 border-2 border-gray-200 rounded-xl text-sm text-gray-900 font-mono placeholder-gray-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-100 transition-all bg-white"
+                placeholder={form.idType === "Passport" ? "e.g. G12345678" : "Document number"}
+                value={form.idNumber}
+                onChange={e => set("idNumber", e.target.value)}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="flex items-center gap-3 pt-1 border-t border-gray-100">
+        <button
+          onClick={onClose}
+          className="flex-1 px-4 py-2.5 text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handle}
+          disabled={loading}
+          className="flex-1 px-4 py-2.5 text-sm font-bold text-white bg-brand-600 hover:bg-brand-700 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl transition-colors shadow-sm"
+        >
+          {loading ? "Saving…" : isEdit ? "Save Changes" : "Add Guest"}
+        </button>
+      </div>
+    </div>
   );
 }
 
