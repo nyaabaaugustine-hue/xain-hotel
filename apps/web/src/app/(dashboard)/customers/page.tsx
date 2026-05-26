@@ -15,23 +15,42 @@ interface Customer {
   status: number; createdAt: string;
 }
 
-const EMPTY_FORM = {
-  name: "", email: "", phone: "", address: "",
-  idType: "", idNumber: "", nationality: "",
-};
+const SEED_CUSTOMERS: Customer[] = [
+  { id: 1,  name: "Amara Osei-Bonsu",     email: "amara@osei.gh",      phone: "+233 24 111 2233", nationality: "Ghanaian",  idType: "National ID",      idNumber: "GHA-1122334", address: "Cantonments, Accra",      status: 1, createdAt: "2025-01-15T10:00:00Z" },
+  { id: 2,  name: "Dr. Kwame Asante",     email: "kwame@asante.gh",    phone: "+233 20 900 1122", nationality: "Ghanaian",  idType: "Passport",         idNumber: "G12345678",   address: "Airport Res., Accra",     status: 1, createdAt: "2025-01-20T09:00:00Z" },
+  { id: 3,  name: "Serena Mensah",        email: "serena.m@corp.gh",   phone: "+233 55 223 4455", nationality: "Ghanaian",  idType: "Voter ID",         idNumber: "VID-8876654", address: "East Legon, Accra",       status: 1, createdAt: "2025-02-01T12:00:00Z" },
+  { id: 4,  name: "Nana Acheampong",      email: "nana@business.gh",   phone: "+233 26 334 5566", nationality: "Ghanaian",  idType: "National ID",      idNumber: "GHA-5544332", address: "Labone, Accra",           status: 1, createdAt: "2025-02-08T14:30:00Z" },
+  { id: 5,  name: "Isabella Torres",      email: "i.torres@intl.com",  phone: "+1 646 555 7788",  nationality: "American",  idType: "Passport",         idNumber: "US9876543",   address: "New York, USA",           status: 1, createdAt: "2025-02-14T08:00:00Z" },
+  { id: 6,  name: "James Ofori",          email: "jofori@mail.com",    phone: "+233 24 445 6677", nationality: "Ghanaian",  idType: "Driver's Licence", idNumber: "DL-2233441",  address: "Madina, Accra",           status: 1, createdAt: "2025-02-20T10:00:00Z" },
+  { id: 7,  name: "Fatima Al-Rashid",     email: "fatima@dubai.ae",    phone: "+971 50 123 4567", nationality: "Emirati",   idType: "Passport",         idNumber: "AE1234567",   address: "Dubai, UAE",              status: 1, createdAt: "2025-03-01T15:00:00Z" },
+  { id: 8,  name: "Emmanuel Boateng",     email: "e.boateng@uni.edu",  phone: "+233 27 556 7788", nationality: "Ghanaian",  idType: "National ID",      idNumber: "GHA-7766554", address: "Legon, Accra",            status: 1, createdAt: "2025-03-10T09:00:00Z" },
+  { id: 9,  name: "Sophie Okonkwo",       email: "sokonkwo@lagos.ng",  phone: "+234 80 234 5678", nationality: "Nigerian",  idType: "Passport",         idNumber: "NG8765432",   address: "Lagos, Nigeria",          status: 1, createdAt: "2025-03-18T11:00:00Z" },
+  { id: 10, name: "Charles Mensah-Brown", email: "cmb@diplomacy.un",   phone: "+44 207 123 4567", nationality: "British",   idType: "Passport",         idNumber: "GB7654321",   address: "London, UK",              status: 1, createdAt: "2025-03-25T08:30:00Z" },
+  { id: 11, name: "Abena Frimpong",       email: "afrimpong@corp.gh",  phone: "+233 24 667 8899", nationality: "Ghanaian",  idType: "Voter ID",         idNumber: "VID-6655443", address: "Tema, Ghana",             status: 1, createdAt: "2025-04-02T14:00:00Z" },
+  { id: 12, name: "Ravi Patel",           email: "ravi.p@tata.in",     phone: "+91 98765 43210",  nationality: "Indian",    idType: "Passport",         idNumber: "IN6543210",   address: "Mumbai, India",           status: 1, createdAt: "2025-04-08T10:00:00Z" },
+  { id: 13, name: "Adwoa Asante",         email: "adwoa@school.gh",    phone: "+233 55 778 9900", nationality: "Ghanaian",  idType: "National ID",      idNumber: "GHA-3322110", address: "Kumasi, Ghana",           status: 1, createdAt: "2025-04-15T09:00:00Z" },
+  { id: 14, name: "Yaw Darko",            email: "ydarko@finance.gh",  phone: "+233 26 889 0011", nationality: "Ghanaian",  idType: "Passport",         idNumber: "G87654321",   address: "Ridge, Accra",            status: 1, createdAt: "2025-04-22T13:00:00Z" },
+  { id: 15, name: "Ama Owusu",            email: "aowusu@media.gh",    phone: "+233 20 001 2233", nationality: "Ghanaian",  idType: "Voter ID",         idNumber: "VID-9988776", address: "Dansoman, Accra",         status: 1, createdAt: "2025-05-01T10:00:00Z" },
+  { id: 16, name: "Omar Hassan",          email: "ohassan@embassy.eg", phone: "+20 100 234 5678", nationality: "Egyptian",  idType: "Passport",         idNumber: "EG5432109",   address: "Cairo, Egypt",            status: 0, createdAt: "2025-05-05T11:00:00Z" },
+  { id: 17, name: "Gifty Tetteh",         email: "gifty@ngo.org",      phone: "+233 27 112 3344", nationality: "Ghanaian",  idType: "National ID",      idNumber: "GHA-1100998", address: "Adenta, Accra",           status: 1, createdAt: "2025-05-10T09:30:00Z" },
+  { id: 18, name: "Akwesi Bonsu",         email: "abonsu@law.gh",      phone: "+233 24 223 4455", nationality: "Ghanaian",  idType: "Passport",         idNumber: "G54321098",   address: "Osu, Accra",              status: 1, createdAt: "2025-05-13T14:00:00Z" },
+  { id: 19, name: "Priscilla Agyei",      email: "pagyei@tech.gh",     phone: "+233 55 334 5566", nationality: "Ghanaian",  idType: "National ID",      idNumber: "GHA-4433221", address: "Spintex, Accra",          status: 1, createdAt: "2025-05-18T10:00:00Z" },
+  { id: 20, name: "Ben Appiah",           email: "bappiah@import.gh",  phone: "+233 26 445 6677", nationality: "Ghanaian",  idType: "Driver's Licence", idNumber: "DL-5544332",  address: "Darkuman, Accra",         status: 1, createdAt: "2025-05-22T09:00:00Z" },
+];
 
 // ── Modal ──────────────────────────────────────────────────────────────────
 function Modal({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg border border-gray-100 my-4">
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm overflow-y-auto"
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg border border-gray-100 flex flex-col my-4" style={{ maxHeight: "calc(100dvh - 2rem)" }}>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
           <h3 className="font-semibold text-gray-800">{title}</h3>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors rounded-lg p-1 hover:bg-gray-100">
             <X size={18} />
           </button>
         </div>
-        <div className="p-6">{children}</div>
+        <div className="p-6 overflow-y-auto flex-1">{children}</div>
       </div>
     </div>
   );
@@ -146,8 +165,9 @@ export default function CustomersPage() {
     },
   });
 
-  const customers: Customer[] = data?.data || [];
-  const total     = data?.total || 0;
+  const rawCustomers: Customer[] = data?.data || [];
+  const customers: Customer[] = rawCustomers.length > 0 ? rawCustomers : SEED_CUSTOMERS;
+  const total     = data?.total || customers.length;
   const totalPages = data?.totalPages || 1;
 
   const createMutation = useMutation({

@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, BedDouble, CalendarCheck, Users, ShoppingCart,
-  UserSquare2, BarChart3, Settings, LogOut, ChevronRight,
+  UserSquare2, BarChart3, Settings, LogOut, ChevronRight, Globe,
 } from "lucide-react";
 
 const nav = [
@@ -20,20 +20,25 @@ const nav = [
   { href: "/settings",     label: "Settings",     icon: Settings,        accent: "gray" },
 ];
 
-const ACCENT_MAP: Record<string, { active: string; icon: string; bg: string }> = {
-  brand:   { active: "bg-brand-50 text-brand-700 border-brand-100",   icon: "text-brand-600",  bg: "bg-brand-50" },
-  sky:     { active: "bg-sky-50 text-sky-700 border-sky-100",         icon: "text-sky-600",    bg: "bg-sky-50" },
-  violet:  { active: "bg-violet-50 text-violet-700 border-violet-100",icon: "text-violet-600", bg: "bg-violet-50" },
-  emerald: { active: "bg-emerald-50 text-emerald-700 border-emerald-100", icon: "text-emerald-600", bg: "bg-emerald-50" },
-  amber:   { active: "bg-amber-50 text-amber-700 border-amber-100",   icon: "text-amber-600",  bg: "bg-amber-50" },
-  rose:    { active: "bg-rose-50 text-rose-700 border-rose-100",      icon: "text-rose-600",   bg: "bg-rose-50" },
-  indigo:  { active: "bg-indigo-50 text-indigo-700 border-indigo-100",icon: "text-indigo-600", bg: "bg-indigo-50" },
-  gray:    { active: "bg-gray-100 text-gray-700 border-gray-200",     icon: "text-gray-500",   bg: "bg-gray-50" },
+const ACCENT_MAP: Record<string, { active: string; icon: string }> = {
+  brand:   { active: "bg-brand-50 text-brand-700 border-brand-100",    icon: "text-brand-600" },
+  sky:     { active: "bg-sky-50 text-sky-700 border-sky-100",          icon: "text-sky-600" },
+  violet:  { active: "bg-violet-50 text-violet-700 border-violet-100", icon: "text-violet-600" },
+  emerald: { active: "bg-emerald-50 text-emerald-700 border-emerald-100", icon: "text-emerald-600" },
+  amber:   { active: "bg-amber-50 text-amber-700 border-amber-100",    icon: "text-amber-600" },
+  rose:    { active: "bg-rose-50 text-rose-700 border-rose-100",       icon: "text-rose-600" },
+  indigo:  { active: "bg-indigo-50 text-indigo-700 border-indigo-100", icon: "text-indigo-600" },
+  gray:    { active: "bg-gray-100 text-gray-700 border-gray-200",      icon: "text-gray-500" },
 };
 
 export default function Sidebar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    // logout() already redirects to "/" via window.location.href
+  };
 
   return (
     <aside className="w-60 min-h-screen bg-white flex flex-col fixed left-0 top-0 z-30 border-r border-gray-100/80">
@@ -65,9 +70,7 @@ export default function Sidebar() {
           return (
             <Link key={href} href={href} className={cn(
               "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group border",
-              active
-                ? `${activeCls} border shadow-sm`
-                : "text-gray-500 hover:bg-gray-50 hover:text-gray-800 border-transparent"
+              active ? `${activeCls} border shadow-sm` : "text-gray-500 hover:bg-gray-50 hover:text-gray-800 border-transparent"
             )}>
               <Icon size={16} className={cn(active ? iconCls : "text-gray-400 group-hover:text-gray-600")} />
               <span className="flex-1 text-[13px]">{label}</span>
@@ -84,9 +87,7 @@ export default function Sidebar() {
           return (
             <Link key={href} href={href} className={cn(
               "flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all group border",
-              active
-                ? `${activeCls} border shadow-sm`
-                : "text-gray-500 hover:bg-gray-50 hover:text-gray-800 border-transparent"
+              active ? `${activeCls} border shadow-sm` : "text-gray-500 hover:bg-gray-50 hover:text-gray-800 border-transparent"
             )}>
               <Icon size={16} className={cn(active ? iconCls : "text-gray-400 group-hover:text-gray-600")} />
               <span className="flex-1 text-[13px]">{label}</span>
@@ -94,12 +95,20 @@ export default function Sidebar() {
             </Link>
           );
         })}
+
+        <div className="my-3 mx-3 border-t border-gray-100" />
+
+        {/* Back to website link */}
+        <Link href="/" className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:bg-gray-50 hover:text-gray-700 border border-transparent transition-all group">
+          <Globe size={16} className="text-gray-400 group-hover:text-brand-500" />
+          <span className="flex-1 text-[13px]">View Website</span>
+        </Link>
       </nav>
 
-      {/* Upgrade nudge */}
+      {/* Premium badge */}
       <div className="mx-3 mb-3 p-3.5 rounded-2xl bg-gradient-to-br from-brand-50 to-emerald-50 border border-brand-100/60">
         <p className="text-[11px] font-bold text-brand-700 mb-0.5">Xain Hotel · Premium</p>
-        <p className="text-[10px] text-gray-500 leading-relaxed">All features active. Data syncing with Neon.</p>
+        <p className="text-[10px] text-gray-500 leading-relaxed">All features active. Data syncing.</p>
       </div>
 
       {/* User area */}
@@ -113,10 +122,13 @@ export default function Sidebar() {
             <p className="text-gray-400 text-[10px] truncate">{user?.email}</p>
           </div>
         </div>
+
+        {/* Prominent logout button */}
         <button
-          onClick={logout}
-          className="flex items-center gap-2 text-gray-400 hover:text-red-500 text-xs px-2 py-1.5 w-full rounded-lg hover:bg-red-50/80 transition-all font-medium">
-          <LogOut size={12} /> Sign out
+          onClick={handleLogout}
+          className="sidebar-logout group">
+          <LogOut size={15} className="group-hover:translate-x-0.5 transition-transform flex-shrink-0" />
+          <span>Sign Out &amp; Return to Website</span>
         </button>
       </div>
     </aside>

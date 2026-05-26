@@ -26,12 +26,26 @@ const FICTIONAL_STATS = {
 };
 
 const FICTIONAL_RESERVATIONS = [
-  { id: "1", bookingNo: "XH-240891", customer: { name: "Amara Osei-Bonsu" }, room: { roomNo: "P-12", roomType: { name: "Penthouse Suite" } }, checkIn: "2025-05-26", status: "checked_in", totalAmount: 3200 },
-  { id: "2", bookingNo: "XH-240887", customer: { name: "Dr. Kwame Asante" }, room: { roomNo: "D-07", roomType: { name: "Deluxe King" } }, checkIn: "2025-05-26", status: "pending", totalAmount: 1850 },
-  { id: "3", bookingNo: "XH-240882", customer: { name: "Serena Mensah" }, room: { roomNo: "S-21", roomType: { name: "Superior Twin" } }, checkIn: "2025-05-25", status: "checked_in", totalAmount: 960 },
-  { id: "4", bookingNo: "XH-240879", customer: { name: "Nana Acheampong" }, room: { roomNo: "D-03", roomType: { name: "Deluxe King" } }, checkIn: "2025-05-25", status: "checked_out", totalAmount: 2400 },
-  { id: "5", bookingNo: "XH-240874", customer: { name: "Isabella Torres" }, room: { roomNo: "P-08", roomType: { name: "Penthouse Suite" } }, checkIn: "2025-05-24", status: "checked_in", totalAmount: 4100 },
-  { id: "6", bookingNo: "XH-240870", customer: { name: "James Ofori" }, room: { roomNo: "S-15", roomType: { name: "Superior Twin" } }, checkIn: "2025-05-24", status: "cancelled", totalAmount: 720 },
+  { id: "1",  bookingNo: "XH-240901", customer: { name: "Amara Osei-Bonsu"    }, room: { roomNo: "P-12", roomType: { name: "Sky Penthouse Suite"  } }, checkIn: "2025-05-26", status: "checked_in",  totalAmount: 9600  },
+  { id: "2",  bookingNo: "XH-240897", customer: { name: "Dr. Kwame Asante"    }, room: { roomNo: "D-07", roomType: { name: "Deluxe Garden Room"   } }, checkIn: "2025-05-26", status: "pending",     totalAmount: 3700  },
+  { id: "3",  bookingNo: "XH-240889", customer: { name: "Serena Mensah"       }, room: { roomNo: "S-21", roomType: { name: "Executive Room"       } }, checkIn: "2025-05-25", status: "checked_in",  totalAmount: 1920  },
+  { id: "4",  bookingNo: "XH-240882", customer: { name: "Nana Acheampong"     }, room: { roomNo: "D-03", roomType: { name: "Deluxe Garden Room"   } }, checkIn: "2025-05-24", status: "checked_out", totalAmount: 4800  },
+  { id: "5",  bookingNo: "XH-240878", customer: { name: "Isabella Torres"     }, room: { roomNo: "P-08", roomType: { name: "Presidential Suite"  } }, checkIn: "2025-05-24", status: "checked_in",  totalAmount: 16400 },
+  { id: "6",  bookingNo: "XH-240871", customer: { name: "James Ofori"         }, room: { roomNo: "S-15", roomType: { name: "Executive Room"       } }, checkIn: "2025-05-24", status: "cancelled",  totalAmount: 720   },
+  { id: "7",  bookingNo: "XH-240865", customer: { name: "Fatima Al-Rashid"    }, room: { roomNo: "K-04", roomType: { name: "Kente Suite"          } }, checkIn: "2025-05-23", status: "checked_out", totalAmount: 2400  },
+  { id: "8",  bookingNo: "XH-240860", customer: { name: "Emmanuel Boateng"    }, room: { roomNo: "C-11", roomType: { name: "Classic Room"          } }, checkIn: "2025-05-22", status: "checked_out", totalAmount: 1000  },
+  { id: "9",  bookingNo: "XH-240855", customer: { name: "Sophie Okonkwo"      }, room: { roomNo: "D-14", roomType: { name: "Deluxe Garden Room"   } }, checkIn: "2025-05-27", status: "pending",     totalAmount: 5550  },
+  { id: "10", bookingNo: "XH-240849", customer: { name: "Charles Mensah-Brown"}, room: { roomNo: "K-09", roomType: { name: "Kente Suite"          } }, checkIn: "2025-05-28", status: "pending",     totalAmount: 3840  },
+  { id: "11", bookingNo: "XH-240843", customer: { name: "Abena Frimpong"      }, room: { roomNo: "C-05", roomType: { name: "Classic Room"          } }, checkIn: "2025-05-21", status: "checked_out", totalAmount: 700   },
+  { id: "12", bookingNo: "XH-240837", customer: { name: "Ravi Patel"          }, room: { roomNo: "P-01", roomType: { name: "Presidential Suite"  } }, checkIn: "2025-05-29", status: "pending",     totalAmount: 19200 },
+  { id: "13", bookingNo: "XH-240831", customer: { name: "Adwoa Asante"        }, room: { roomNo: "S-08", roomType: { name: "Executive Room"       } }, checkIn: "2025-05-20", status: "checked_out", totalAmount: 1920  },
+  { id: "14", bookingNo: "XH-240825", customer: { name: "Yaw Darko"           }, room: { roomNo: "K-06", roomType: { name: "Kente Suite"          } }, checkIn: "2025-05-30", status: "pending",     totalAmount: 7200  },
+  { id: "15", bookingNo: "XH-240819", customer: { name: "Ama Owusu"           }, room: { roomNo: "C-18", roomType: { name: "Classic Room"          } }, checkIn: "2025-05-19", status: "checked_out", totalAmount: 700   },
+  { id: "16", bookingNo: "XH-240813", customer: { name: "Omar Hassan"         }, room: { roomNo: "D-17", roomType: { name: "Deluxe Garden Room"   } }, checkIn: "2025-05-18", status: "cancelled",  totalAmount: 2400  },
+  { id: "17", bookingNo: "XH-240807", customer: { name: "Gifty Tetteh"        }, room: { roomNo: "S-22", roomType: { name: "Executive Room"       } }, checkIn: "2025-06-01", status: "pending",     totalAmount: 5600  },
+  { id: "18", bookingNo: "XH-240801", customer: { name: "Akwesi Bonsu"        }, room: { roomNo: "P-05", roomType: { name: "Sky Penthouse Suite"  } }, checkIn: "2025-05-16", status: "checked_out", totalAmount: 6400  },
+  { id: "19", bookingNo: "XH-240795", customer: { name: "Priscilla Agyei"     }, room: { roomNo: "K-11", roomType: { name: "Kente Suite"          } }, checkIn: "2025-06-03", status: "pending",     totalAmount: 10800 },
+  { id: "20", bookingNo: "XH-240789", customer: { name: "Ben Appiah"          }, room: { roomNo: "C-02", roomType: { name: "Classic Room"          } }, checkIn: "2025-05-15", status: "checked_out", totalAmount: 350   },
 ];
 
 const LIVE_ACTIVITY = [
@@ -381,7 +395,7 @@ export default function DashboardPage() {
         </div>
         {/* Table footer */}
         <div className="px-6 py-3 border-t border-gray-50 bg-gray-50/30 flex items-center justify-between">
-          <p className="text-[11px] text-gray-400 font-medium">Showing {recent.length} most recent · Auto-refreshes every 60s</p>
+          <p className="text-[11px] text-gray-400 font-medium">Showing {recent.length} most recent reservations · Auto-refreshes every 60s</p>
           <div className="flex items-center gap-1.5 text-[11px] font-semibold text-brand-600">
             <Activity size={11} />
             Live data

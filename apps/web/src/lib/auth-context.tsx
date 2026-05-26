@@ -21,7 +21,6 @@ const AuthContext = createContext<AuthCtx>({} as AuthCtx);
 export const useAuth = () => useContext(AuthContext);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  // Hydrate from localStorage immediately so no flash-redirect on page refresh
   const [user, setUser] = useState<User | null>(() => {
     if (typeof window === "undefined") return null;
     return loadUser();
@@ -31,7 +30,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshFailRef = useRef(0);
 
   useEffect(() => {
-    // Verify session with server; keep localStorage user while waiting
     api.get("/api/auth/me")
       .then(r => {
         const verified = r.data.data;
@@ -39,8 +37,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         saveUser(verified);
       })
       .catch(err => {
-        // Only clear session on an explicit 401 (not logged in).
-        // Network errors / 5xx (cold-start API) keep the cached user.
         if (err?.response?.status === 401) {
           clearUser();
           setUser(null);
@@ -55,14 +51,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     refreshRef.current = setInterval(async () => {
       try {
         await api.post("/api/auth/refresh");
-        refreshFailRef.current = 0; // reset on success
+        refreshFailRef.current = 0;
       } catch {
         refreshFailRef.current += 1;
-        // Only force-logout after 3 consecutive refresh failures
         if (refreshFailRef.current >= 3) {
           clearUser();
           setUser(null);
-          window.location.href = "/login";
+          // Redirect to website home on session expiry
+          window.location.href = "/";
         }
       }
     }, 10 * 60 * 1000);
@@ -76,11 +72,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     saveUser(loggedIn);
   };
 
+  // Logout redirects to website home page, not /login
   const logout = async () => {
     try { await api.post("/api/auth/logout"); } catch {}
     clearUser();
     setUser(null);
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   return <AuthContext.Provider value={{ user, loading, login, logout }}>{children}</AuthContext.Provider>;

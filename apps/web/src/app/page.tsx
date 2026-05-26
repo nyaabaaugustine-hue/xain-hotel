@@ -77,10 +77,12 @@ const RESTAURANT_MENU = [
 ];
 
 const EVENTS = [
-  { date: "JUN 15", title: "Gold Coast Jazz Night",  time: "7:00 PM", location: "Rooftop Lounge", tag: "Music" },
-  { date: "JUN 22", title: "Farm-to-Table Dinner",   time: "6:30 PM", location: "Gold Coast Restaurant", tag: "Dining" },
-  { date: "JUL 04", title: "Sunrise Yoga",           time: "6:00 AM", location: "Infinity Pool Deck", tag: "Wellness" },
-  { date: "JUL 12", title: "Kente Weaving Workshop", time: "10:00 AM",location: "Cultural Hall", tag: "Culture" },
+  { date: "JUN 15", title: "Gold Coast Jazz Night",    time: "7:00 PM",  location: "Rooftop Lounge",       tag: "Music",   image: "https://res.cloudinary.com/dwsl2ktt2/image/upload/v1779588185/sunset-pool_1203-3191_wg2dwy.jpg" },
+  { date: "JUN 22", title: "Farm-to-Table Dinner",     time: "6:30 PM",  location: "Gold Coast Restaurant",tag: "Dining",  image: "https://res.cloudinary.com/dwsl2ktt2/image/upload/v1779588185/tropical-hotel-holiday-background-resort_1203-4943_raibay.avif" },
+  { date: "JUL 04", title: "Sunrise Yoga Retreat",     time: "6:00 AM",  location: "Infinity Pool Deck",   tag: "Wellness",image: "https://res.cloudinary.com/dwsl2ktt2/image/upload/v1779588185/white-hammocks-with-umbrellas_1203-2073_ir3bys.avif" },
+  { date: "JUL 12", title: "Kente Weaving Workshop",   time: "10:00 AM", location: "Cultural Hall",        tag: "Culture", image: "https://res.cloudinary.com/dwsl2ktt2/image/upload/v1779588186/g_mzqus0.avif" },
+  { date: "JUL 19", title: "Chef's Table Experience",  time: "7:30 PM",  location: "Private Dining Room",  tag: "Dining",  image: "https://res.cloudinary.com/dwsl2ktt2/image/upload/v1779588184/front-desk-staff-managing-guest-checkin_482257-85379_wbx41s.avif" },
+  { date: "AUG 02", title: "Accra Sundowner Cocktails",time: "5:00 PM",  location: "Sky Bar Terrace",      tag: "Social",  image: "https://res.cloudinary.com/dwsl2ktt2/image/upload/v1779588183/beautiful-aerial-shot-coastal-city-sea_181624-599_fjrnqi.avif" },
 ];
 
 // ── Mega Nav ─────────────────────────────────────────────────────────────
@@ -738,25 +740,31 @@ export default function RootPage() {
               Upcoming Events
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-            {EVENTS.map(({ date, title, time, location, tag }) => (
-              <div key={title} className="group border border-black/6 rounded-3xl p-7 bg-white hover:shadow-lg hover:border-gold-200/60 hover:-translate-y-1 transition-all duration-400">
-                <div className="flex items-start justify-between mb-5">
-                  <div className="bg-brand-900 text-white px-3 py-2 rounded-xl text-center min-w-[52px]">
-                    <p className="text-gold-400/80 text-[9px] tracking-widest uppercase font-semibold">{date.split(" ")[0]}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+            {EVENTS.map(({ date, title, time, location, tag, image }) => (
+              <div key={title} className="group border border-black/6 rounded-3xl bg-white hover:shadow-xl hover:-translate-y-1.5 transition-all duration-400 overflow-hidden">
+                {/* Event image */}
+                <div className="relative h-44 overflow-hidden">
+                  <Image src={image} alt={title} fill className="object-cover group-hover:scale-105 transition-transform duration-700" sizes="(max-width:640px) 100vw,(max-width:1280px) 50vw,33vw" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-brand-900/80 via-brand-900/20 to-transparent" />
+                  {/* Date badge overlaid on image */}
+                  <div className="absolute top-4 left-4 bg-white/10 backdrop-blur-md border border-white/20 text-white px-3 py-2 rounded-xl text-center min-w-[52px]">
+                    <p className="text-gold-400 text-[9px] tracking-widest uppercase font-bold">{date.split(" ")[0]}</p>
                     <p className="text-white font-display text-xl font-semibold leading-tight" style={{ fontFamily: "var(--font-display)" }}>{date.split(" ")[1]}</p>
                   </div>
-                  <span className="text-[9px] font-bold tracking-widest uppercase text-gold-600 bg-gold-50 border border-gold-100 px-2.5 py-1 rounded-full">{tag}</span>
+                  <span className="absolute top-4 right-4 text-[9px] font-bold tracking-widest uppercase text-gold-400 bg-brand-900/70 backdrop-blur-sm border border-gold-400/30 px-2.5 py-1 rounded-full">{tag}</span>
                 </div>
-                <h3 className="font-semibold text-brand-900 mb-3 text-base tracking-tight">{title}</h3>
-                <div className="flex flex-col gap-1.5 text-[11px] text-gray-400">
-                  <span className="flex items-center gap-1.5"><Clock size={11} /> {time}</span>
-                  <span className="flex items-center gap-1.5"><MapPin size={11} /> {location}</span>
-                </div>
-                <div className="mt-6 pt-5 border-t border-gray-50">
-                  <Link href="/contact" className="text-[10px] font-bold text-brand-700 group-hover:text-gold-600 transition-colors tracking-widest uppercase flex items-center gap-1.5">
-                    Reserve Seat <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
-                  </Link>
+                <div className="p-6">
+                  <h3 className="font-semibold text-brand-900 mb-3 text-base tracking-tight">{title}</h3>
+                  <div className="flex flex-col gap-1.5 text-[11px] text-gray-500">
+                    <span className="flex items-center gap-1.5"><Clock size={11} className="text-gold-500" /> {time}</span>
+                    <span className="flex items-center gap-1.5"><MapPin size={11} className="text-gold-500" /> {location}</span>
+                  </div>
+                  <div className="mt-5 pt-4 border-t border-gray-50">
+                    <Link href="/contact" className="text-[10px] font-bold text-brand-700 group-hover:text-gold-600 transition-colors tracking-widest uppercase flex items-center gap-1.5">
+                      Reserve Seat <ChevronRight size={12} className="group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}

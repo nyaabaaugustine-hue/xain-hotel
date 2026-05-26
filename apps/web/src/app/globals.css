@@ -421,3 +421,221 @@ textarea.input {
 .text-gold-600 { color: #8A6400; }
 .bg-gold-50 { background-color: #FFFDF0; }
 .border-gold-100 { border-color: #FDF3D0; }
+
+
+/* ══════════════════════════════════════════
+   XH PUBLIC SITE — BUTTON & LAYOUT CLASSES
+   (Required by page.tsx and public layout)
+══════════════════════════════════════════ */
+
+/* Gold CTA button — used as .xh-btn-gold on website */
+.xh-btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #B8860B 0%, #E8B433 45%, #F5CC66 65%, #C49100 100%);
+  background-size: 250% auto;
+  color: #1A0800 !important;
+  font-family: var(--font-body);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  border-radius: 8px;
+  padding: 0.8rem 2rem;
+  border: none;
+  cursor: pointer;
+  transition: background-position 0.5s ease, transform 0.25s ease, box-shadow 0.3s ease;
+  white-space: nowrap;
+}
+.xh-btn-gold:hover {
+  background-position: right center;
+  box-shadow: 0 8px 30px rgba(232,180,51,0.55), 0 2px 8px rgba(0,0,0,0.3);
+  transform: translateY(-2px);
+  color: #1A0800 !important;
+}
+.xh-btn-gold:active { transform: translateY(0); }
+
+/* Outline white button — used on dark hero backgrounds */
+.xh-btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(255,255,255,0.55);
+  color: #ffffff !important;
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  border-radius: 8px;
+  padding: 0.8rem 2rem;
+  background: rgba(255,255,255,0.07);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+.xh-btn-outline:hover {
+  background: rgba(255,255,255,0.14);
+  border-color: rgba(255,255,255,0.85);
+  transform: translateY(-1px);
+  color: #ffffff !important;
+}
+
+/* Outline dark button — used on light backgrounds */
+.xh-btn-outline-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid rgba(15,112,72,0.6);
+  color: #0F7048 !important;
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  border-radius: 8px;
+  padding: 0.8rem 2rem;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+.xh-btn-outline-dark:hover {
+  background: #EDF7F1;
+  border-color: #0F7048;
+  transform: translateY(-1px);
+}
+
+/* Gold decorative line */
+.xh-goldline {
+  width: 2.5rem;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #E8B433, transparent);
+  border-radius: 1px;
+}
+
+/* Public site wrapper */
+.xh-public {
+  background: #020C05;
+}
+
+/* Top bar used in public layout */
+.xh-topbar {
+  background: #020C05;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 0.5rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 60;
+}
+
+/* ── NAV: Force nav link colours visible ── */
+/* Ensure nav text is always visible regardless of scroll state */
+nav .text-white\/60 { color: rgba(255,255,255,0.90) !important; }
+nav .text-white\/65 { color: rgba(255,255,255,0.92) !important; }
+nav .text-white\/70 { color: rgba(255,255,255,0.95) !important; }
+nav .text-white\/45 { color: rgba(255,255,255,0.80) !important; }
+nav .text-white\/30 { color: rgba(255,255,255,0.70) !important; }
+
+/* Reserve button always has solid text */
+.xh-btn-gold,
+a.xh-btn-gold,
+button.xh-btn-gold {
+  color: #1A0800 !important;
+  text-shadow: none !important;
+}
+
+/* ── MODAL CONTAINMENT ── */
+/* Ensure modals/popups never exceed viewport */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  overflow-y: auto;
+}
+
+.modal-box {
+  background: #ffffff;
+  border-radius: 1.25rem;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.3);
+  width: 100%;
+  max-width: 560px;
+  max-height: calc(100dvh - 2rem);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.modal-box-wide {
+  max-width: 760px;
+}
+
+.modal-header {
+  flex-shrink: 0;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  flex-shrink: 0;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* ── DASHBOARD HEADER ── */
+.xh-header {
+  padding-bottom: 0.5rem;
+}
+
+/* Ensure dashboard logout button always shows */
+.sidebar-logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  color: #DC2626;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.65rem 1rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.sidebar-logout:hover {
+  background: #FEE2E2;
+  border-color: #FCA5A5;
+  color: #B91C1C;
+}
+
+/* ── GOLD-500 Utility ── */
+.text-gold-500 { color: #C49100; }
+.bg-gold-500   { background-color: #C49100; }
+.bg-gold-600   { background-color: #8A6400; }
+.border-gold-200 { border-color: #FAEA9C; }
+.hover\:border-gold-200\/60:hover { border-color: rgba(250,234,156,0.6); }
+.hover\:text-gold-600:hover { color: #8A6400; }
+.hover\:text-gold-400:hover { color: #E8B433; }
